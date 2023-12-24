@@ -307,3 +307,5 @@ On every request, the server will validate if it received a valid token. These t
 
 > 💡: In Spring, CSRF security is enabled by default.
 
+---
+
