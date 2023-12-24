@@ -1,0 +1,474 @@
+<!doctype html>
+<html >
+<head>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!--[if lt IE 9]>
+                <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+        <![endif]-->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+
+    <!-- <link rel="stylesheet" type="text/css" href="template.css" /> -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/diversen/pandoc-bootstrap-adaptive-template@959c3622/template.css" />
+
+    <link href="https://vjs.zencdn.net/5.4.4/video-js.css" rel="stylesheet" />
+
+    <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+    <!-- <script type='text/javascript' src='menu/js/jquery.cookie.js'></script> -->
+    <!-- <script type='text/javascript' src='menu/js/jquery.hoverIntent.minified.js'></script> -->
+    <!-- <script type='text/javascript' src='menu/js/jquery.dcjqaccordion.2.7.min.js'></script> -->
+
+    <!-- <link href="menu/css/skins/blue.css" rel="stylesheet" type="text/css" /> -->
+    <!-- <link href="menu/css/skins/graphite.css" rel="stylesheet" type="text/css" /> -->
+    <!-- <link href="menu/css/skins/grey.css" rel="stylesheet" type="text/css" /> -->
+  
+    <!-- <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+        
+  
+    <!-- <script src="script.js"></script> -->
+  
+    <!-- <script src="jquery.sticky-kit.js "></script> -->
+    <script type='text/javascript' src='https://cdn.jsdelivr.net/gh/diversen/pandoc-bootstrap-adaptive-template@959c3622/menu/js/jquery.cookie.js'></script>
+    <script type='text/javascript' src='https://cdn.jsdelivr.net/gh/diversen/pandoc-bootstrap-adaptive-template@959c3622/menu/js/jquery.hoverIntent.minified.js'></script>
+    <script type='text/javascript' src='https://cdn.jsdelivr.net/gh/diversen/pandoc-bootstrap-adaptive-template@959c3622/menu/js/jquery.dcjqaccordion.2.7.min.js'></script>
+
+    <link href="https://cdn.jsdelivr.net/gh/diversen/pandoc-bootstrap-adaptive-template@959c3622/menu/css/skins/blue.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/gh/diversen/pandoc-bootstrap-adaptive-template@959c3622/menu/css/skins/graphite.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/gh/diversen/pandoc-bootstrap-adaptive-template@959c3622/menu/css/skins/grey.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/gh/ryangrose/easy-pandoc-templates@948e28e5/css/elegant_bootstrap.css" rel="stylesheet" type="text/css" />
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+    <script src="https://cdn.jsdelivr.net/gh/diversen/pandoc-bootstrap-adaptive-template@959c3622/script.js"></script>
+  
+    <script src="https://cdn.jsdelivr.net/gh/diversen/pandoc-bootstrap-adaptive-template@959c3622/jquery.sticky-kit.js"></script>
+    <meta name="generator" content="pandoc" />
+  <title>Frameworks summary</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+
+    
+    <div class="navbar navbar-static-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <span class="doc-title">Frameworks summary</span>
+        <ul class="nav pull-right doc-info">
+                            </ul>
+      </div>
+    </div>
+  </div>
+    <div class="container">
+    <div class="row">
+            <div id="TOC" class="span3">
+        <div class="well toc">
+
+        <ul>
+        <li><a href="#frameworks-summary"
+        id="toc-frameworks-summary">Frameworks summary</a>
+        <ul>
+        <li><a href="#rest" id="toc-rest">1. REST</a>
+        <ul>
+        <li><a href="#http-refresher" id="toc-http-refresher">1.1 HTTP
+        refresher</a></li>
+        <li><a href="#rest-webservices" id="toc-rest-webservices">1.2
+        Rest webservices</a></li>
+        <li><a href="#rest-webservices-java-springboot"
+        id="toc-rest-webservices-java-springboot">1.3 Rest webservices:
+        Java (<em>Springboot</em>)</a></li>
+        <li><a href="#testing-webservices"
+        id="toc-testing-webservices">1.4 Testing webservices</a></li>
+        <li><a href="#webservices-security"
+        id="toc-webservices-security">1.5 Webservices security</a></li>
+        </ul></li>
+        </ul></li>
+        </ul>
+
+        </div>
+      </div>
+            <div class="span9">
+
+      
+      <h1 id="frameworks-summary">Frameworks summary</h1>
+<h2 id="rest">1. REST</h2>
+<h3 id="http-refresher">1.1 HTTP refresher</h3>
+<ul>
+<li>Client-server protocol</li>
+<li>Transport protocol: TCP on port 80</li>
+<li>Request-response</li>
+</ul>
+<h4 id="http-request">HTTP Request</h4>
+<p>Request types:</p>
+<ul>
+<li>GET</li>
+<li>POST</li>
+<li>PUT</li>
+<li>DELETE</li>
+<li>HEAD</li>
+<li>OPTIONS</li>
+</ul>
+<p>Statuscodes:</p>
+<ul>
+<li>1xx: Informative</li>
+<li>2xx: Success</li>
+<li>3xx: Redirection</li>
+<li>4xx: Client error</li>
+<li>5xx: Server error</li>
+</ul>
+<h3 id="rest-webservices">1.2 Rest webservices</h3>
+<p>REST stands for Representational State Transfer. It’s an
+architectural style used for designing networked applications,
+especially web services. REST relies on a client-server architecture
+where the client interacts with the server via requests to access and
+manipulate resources on the server</p>
+<ul>
+<li><strong>Client-server</strong></li>
+<li><strong>Stateless</strong>: server doesn’t store any client
+context</li>
+<li><strong>Uniform interface</strong>: independent of type of
+client</li>
+<li><strong>Cacheable</strong>: responses from REST service can specify
+to cache for a specified period. (using the <code>Cache-Control</code>
+header field)</li>
+<li><strong>Layered system</strong>: client doesn’t now which layer it
+is connected to</li>
+<li><strong>Code on demand</strong>: Content of message can also be
+code</li>
+<li>Resource-based: can be any data or service that the app exposes,
+resources is identifiable via a URI</li>
+<li>CRUD operations: Must support GET, POST, PUT, DELETE methods.</li>
+<li>Representational resources: could be represented by multiple
+representations (JSON, XML, …)</li>
+</ul>
+<h4 id="uri-uniform-resource-identifier">URI (Uniform Resource
+Identifier)</h4>
+<p>URI’s are hierarchical structures that represent a resource on which
+CRUD actions can be performed.</p>
+<p>hierarchical:
+<code>http://www.myservice.org/discussions/{year}/{day}/{month}/{topic}</code></p>
+<p>It is also possible to add parameters to the URI to filter or sort on
+a resources:
+<code>http://www.myservice.org/discussions?region=USA&amp;year=2023</code></p>
+<h4 id="glory-of-rest">Glory of REST</h4>
+<figure>
+<img src="./img/glory-of-rest.png" alt="Glory of REST" />
+<figcaption aria-hidden="true">Glory of REST</figcaption>
+</figure>
+<h5 id="level-0-the-swamp-of-pox">Level 0: The swamp of pox</h5>
+<ul>
+<li>One endpoint</li>
+<li>HTTP only as transport</li>
+<li>Remote procedure invocation
+(<code>POST &lt;openSlotRequest</code>)</li>
+</ul>
+<h5 id="level-1-resources">Level 1: Resources</h5>
+<ul>
+<li>Multiple endpoints</li>
+<li>Arguments in body (<code>POST &lt;appointmentRequest</code>)</li>
+</ul>
+<h5 id="level-2-http-methods">Level 2: HTTP-methods</h5>
+<ul>
+<li>HTTP-methods as CRUD (<code>GET ?date=20231224</code>)</li>
+<li>HTTP-statuscodes as response
+(<code>200 OK &lt;openSlotList</code>)</li>
+</ul>
+<h5 id="level-3-hypermedia-controls">Level 3: Hypermedia controls</h5>
+<ul>
+<li>HATEOAS (Hypertext As The Engine Of Application State)</li>
+<li>Links to other resources in response</li>
+<li>Selfdocumenting protocol</li>
+</ul>
+<h3 id="rest-webservices-java-springboot">1.3 Rest webservices: Java
+(<em>Springboot</em>)</h3>
+<p><strong>Why springboot?</strong></p>
+<p>Spring avoids a lot of manual configuration and is easy to manage
+dependently.</p>
+<h4 id="spring-architecture">Spring architecture</h4>
+<figure>
+<img src="./img/spring-architecture.png"
+alt="Architecture REST API in Spring" />
+<figcaption aria-hidden="true">Architecture REST API in
+Spring</figcaption>
+</figure>
+<ol type="1">
+<li>Spring-framework receives HTTP-req and determines which
+<em>method</em> of which <em>controller</em> has to get called.</li>
+<li>(Opt) Convert JSON in body to specific object</li>
+<li>(Opt) Validate input values of object</li>
+<li>Call method of <em>controller</em> with object as param</li>
+<li><em>Controller</em> calls underlying logic</li>
+<li>Logic interacts with data-layer</li>
+<li>Result of <em>controller</em> gets serialized to JSON</li>
+<li>HTTP-response gets generated (possibly with JSON-object in
+body)</li>
+</ol>
+<h4 id="get-controller">GET controller</h4>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="im">org</span><span class="op">.</span><span class="im">springframework</span><span class="op">.</span><span class="im">web</span><span class="op">.</span><span class="im">bind</span><span class="op">.</span><span class="im">annotation</span><span class="op">.*;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">@RestController</span> <span class="co">// Indicate that this class is a RestController</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">@RequestMapping</span><span class="op">(</span><span class="st">&quot;agenda&quot;</span><span class="op">)</span> <span class="co">//The path to access agendas (eg: localhost:8080/agenda)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> AgendaController <span class="op">{</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> Agenda agenda<span class="op">;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  pubic <span class="fu">AgendaController</span><span class="op">(</span>Agenda agenda<span class="op">)</span> <span class="op">{</span> <span class="kw">this</span><span class="op">.</span><span class="fu">agenda</span> <span class="op">=</span> agenda<span class="op">;</span> <span class="op">}</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">@GetMapping</span> <span class="co">// Indicate that method handles Get-requests</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="bu">Collection</span><span class="op">&lt;</span>AgendaItem<span class="op">&gt;</span> <span class="fu">agendaFromNow</span><span class="op">()</span> <span class="op">{</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> agenda<span class="op">.</span><span class="fu">getAgendaItem</span><span class="op">(</span><span class="kw">new</span> <span class="bu">Date</span><span class="op">());</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<ul>
+<li><code>@RestController</code>:
+<ul>
+<li>Normal class</li>
+<li>Wrapped in a <code>serverlet</code></li>
+<li>REST-service</li>
+</ul></li>
+<li><code>@RequestMapping</code>:
+<ul>
+<li>Specifies which path a REST-service needs to handle.</li>
+</ul></li>
+<li><code>@GetMapping</code>:
+<ul>
+<li>Specifies which HTTP-method a method response to</li>
+<li>Result is automatically converted to JSON</li>
+<li>Can have a path as parameter (eg
+<code>GetMapping("/id/{id}")</code>)
+<ul>
+<li>Param can be retrieved using <code>@RequestParam("id")</code></li>
+</ul></li>
+</ul></li>
+<li><code>@PostMapping</code>:
+<ul>
+<li>Body can be retrieved using
+<code>@RequestBody AgendaItem item</code></li>
+</ul></li>
+</ul>
+<h5 id="dependency-injection">Dependency injection</h5>
+<p>DI is needed to make the Agenda class (dependency) available to the
+to <code>RestController</code>.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="at">@Component</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> Agenda <span class="op">{</span><span class="kw">...</span><span class="op">}</span></span></code></pre></div>
+<h5 id="method-response-status">Method response status</h5>
+<p>A REST-method typically returns a <code>ResponseEntity</code> (along
+with a message).</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="at">@GetMapping</span><span class="op">(</span><span class="st">&quot;/age&quot;</span><span class="op">)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>ResponseEntity<span class="op">&lt;</span><span class="bu">String</span><span class="op">&gt;</span> <span class="fu">age</span><span class="op">(</span><span class="at">@RequestParam</span><span class="op">(</span><span class="st">&quot;yearOfBirth&quot;</span><span class="op">)</span> <span class="dt">int</span> yearOfBirth<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span><span class="fu">invalidAge</span><span class="op">(</span>yearOfBirth<span class="op">))</span> <span class="op">{</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">new</span> ResponseEntity<span class="op">&lt;&gt;(</span><span class="st">&quot;Invalid year of birth&quot;</span><span class="op">,</span> HttpStatus<span class="op">.</span><span class="fu">BAD_REQUEST</span><span class="op">);</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="kw">new</span> ResponseEntity<span class="op">&lt;&gt;(</span><span class="st">&quot;YOB is &quot;</span> <span class="op">+</span> yearOfBirth<span class="op">,</span> HttpStatus<span class="op">.</span><span class="fu">OK</span><span class="op">);</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>It is also possible to couple a statuscode to an exception:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="at">@ResponseStatus</span><span class="op">(</span>code <span class="op">=</span> HttpStatus<span class="op">.</span><span class="fu">BAD_REQUEST</span><span class="op">)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> CustomException <span class="kw">extends</span> <span class="bu">RuntimeException</span> <span class="op">{}</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="at">@PostMapping</span><span class="op">()</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="at">@ResponseStatus</span><span class="op">(</span>HttpStatus<span class="op">.</span><span class="fu">CREATED</span><span class="op">)</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">storeEmployee</span><span class="op">(</span><span class="at">@RequestBody</span> Employee employee<span class="op">)</span> <span class="op">{</span><span class="kw">...</span><span class="op">}</span></span></code></pre></div>
+<p>Here the <code>ResponseStatus</code> will automatically return a 201
+if the creation of employee was successful.</p>
+<p>Finally it is also common to respond with a URI.</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="at">@PostMapping</span><span class="op">(</span><span class="st">&quot;/user/{username}&quot;</span><span class="op">)</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> ResponseEntity<span class="op">&lt;</span><span class="bu">Void</span><span class="op">&gt;</span> <span class="fu">createTodo</span><span class="op">(</span><span class="at">@PathVariable</span> <span class="bu">String</span> username<span class="op">,</span> <span class="at">@RequestBody</span> Todo todo<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  todo<span class="op">.</span><span class="fu">setUsername</span><span class="op">(</span>username<span class="op">);</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  Todo createdTodo <span class="op">=</span> toJpaRepo<span class="op">.</span><span class="fu">save</span><span class="op">(</span>todo<span class="op">);</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="bu">URI</span> uri <span class="op">=</span> ServletUriComponentsBuilder<span class="op">.</span><span class="fu">fromCurrentRequest</span><span class="op">()</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>              <span class="op">.</span><span class="fu">path</span><span class="op">(</span><span class="st">&quot;/id&quot;</span><span class="op">).</span><span class="fu">buildAndExpand</span><span class="op">(</span>createdTodo<span class="op">.</span><span class="fu">getId</span><span class="op">()).</span><span class="fu">toUri</span><span class="op">();</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> ResponseEntity<span class="op">.</span><span class="fu">created</span><span class="op">(</span>uri<span class="op">).</span><span class="fu">build</span><span class="op">();</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 id="testing-webservices">1.4 Testing webservices</h3>
+<h4 id="unit-tests-junit">Unit tests (Junit)</h4>
+<p><strong>Fixture</strong>:</p>
+<ul>
+<li>Fixed context</li>
+<li>baseline state</li>
+</ul>
+<p>Four phases:</p>
+<ol type="1">
+<li>Setup: Prepare text fixture</li>
+<li>Exercise: Interact with system to research</li>
+<li>Verify: Verify if it behaves as expected</li>
+<li>Tear down: Break down text fixture to original state</li>
+</ol>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="at">@ExtendWith</span><span class="op">(</span>SpringExtension<span class="op">.</span><span class="fu">class</span><span class="op">)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="at">@SpringBootTest</span><span class="op">(</span>webEnvironment <span class="op">=</span> WebEnvironment<span class="op">.</span><span class="fu">RANDOM_PORT</span><span class="op">)</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="at">@AutoConfigureWebTestClient</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="at">@ActiveProfile</span><span class="op">(</span><span class="st">&quot;test&quot;</span><span class="op">)</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> RestAgendaApplicationTest <span class="op">{</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">@Autowired</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> WebTestClient webClient<span class="op">;</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">@Test</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">testGetAllRepos</span><span class="op">()</span> <span class="op">{</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    WebTestClient<span class="op">.</span><span class="fu">get</span><span class="op">().</span><span class="fu">uri</span><span class="op">(</span><span class="st">&quot;/api/repos&quot;</span><span class="op">)</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">accept</span><span class="op">(</span>MediaType<span class="op">.</span><span class="fu">APPLICATION_JSON_UTF8</span><span class="op">)</span>  <span class="co">// Set header</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">exchange</span><span class="op">()</span>                               <span class="co">// Send message</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">expectStatus</span><span class="op">().</span><span class="fu">isOk</span><span class="op">()</span>                    <span class="co">// Check status</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">expectHeader</span><span class="op">().</span><span class="fu">contentType</span><span class="op">(</span>MediaType<span class="op">.</span><span class="fu">APPLICATION_JSON_UTF8</span><span class="op">)</span> <span class="co">// Check header</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">expectedBodyList</span><span class="op">(</span>Repo<span class="op">.</span><span class="fu">class</span><span class="op">)</span>             <span class="co">// Check body</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>The <code>@ActiveProfile</code> annotation is optional but is very
+useful. It let’s us use a different bean configured specifically for
+testing purposes.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="at">@Component</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="at">@Profile</span><span class="op">(</span><span class="st">&quot;test&quot;</span><span class="op">)</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> DummyDao <span class="kw">implements</span> Dao <span class="op">{</span><span class="kw">...</span><span class="op">}</span></span></code></pre></div>
+<h3 id="webservices-security">1.5 Webservices security</h3>
+<h4 id="authentication">Authentication</h4>
+<p>Configure login information</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="at">@Configuration</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="at">@EnableWebSecurity</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> SecurityConfig <span class="op">{</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">@Bean</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> UserDetailsService <span class="fu">userDetailsService</span><span class="op">(</span>BCryptPasswordEncoder bCryptPasswordEncoder<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    InMemoryUserDetailsManager manager <span class="op">=</span> <span class="kw">new</span> <span class="fu">InMemoryUserDetailsManager</span><span class="op">();</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    manager<span class="op">.</span><span class="fu">createUser</span><span class="op">(</span>User<span class="op">.</span><span class="fu">withUsername</span><span class="op">(</span><span class="st">&quot;user&quot;</span><span class="op">)</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">password</span><span class="op">(</span>bCryptPasswordEncoder<span class="op">.</span><span class="fu">encode</span><span class="op">(</span><span class="st">&quot;userPass&quot;</span><span class="op">))</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">roles</span><span class="op">(</span><span class="st">&quot;USER&quot;</span><span class="op">)</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">build</span><span class="op">());</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    manager<span class="op">.</span><span class="fu">createUser</span><span class="op">(</span>User<span class="op">.</span><span class="fu">withUsername</span><span class="op">(</span><span class="st">&quot;admin&quot;</span><span class="op">)</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">password</span><span class="op">(</span>bCryptPasswordEncoder<span class="op">.</span><span class="fu">encode</span><span class="op">(</span><span class="st">&quot;adminPass&quot;</span><span class="op">))</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">roles</span><span class="op">(</span><span class="st">&quot;USER&quot;</span><span class="op">,</span> <span class="st">&quot;ADMIN&quot;</span><span class="op">)</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">build</span><span class="op">());</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> manager<span class="op">;</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h4 id="authorization">Authorization</h4>
+<p>Assign roles to users and restrict certain roles from performing
+certain actions.</p>
+<figure>
+<img src="./img/authorization.png" alt="Authorization" />
+<figcaption aria-hidden="true">Authorization</figcaption>
+</figure>
+<p><strong>Allow certain roles webservice:</strong>
+(<code>anyRequest()</code>)</p>
+<p><strong>Allow certain roles on some paths:</strong>
+(<code>requestMatchers(path)</code>)</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="at">@Configuration</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="at">@EnableWebSecurity</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> SecurityConfig <span class="op">{</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">@Bean</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> SecurityFilterChain <span class="fu">securityFilterChain</span><span class="op">(</span>HttpSecurity http<span class="op">)</span> <span class="kw">throws</span> <span class="bu">Exception</span> <span class="op">{</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    http</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">authorizeHttpRequests</span><span class="op">((</span>authz<span class="op">)</span> <span class="op">-&gt;</span> authz</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">requestMatchers</span><span class="op">(</span><span class="st">&quot;/api/admin/**&quot;</span><span class="op">).</span><span class="fu">hasRole</span><span class="op">(</span><span class="st">&quot;ADMIN&quot;</span><span class="op">)</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">requestMatchers</span><span class="op">(</span><span class="st">&quot;/api/user/**&quot;</span><span class="op">).</span><span class="fu">hasRole</span><span class="op">(</span><span class="st">&quot;USER&quot;</span><span class="op">)</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">anyRequest</span><span class="op">().</span><span class="fu">authenticated</span><span class="op">()</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>      <span class="op">);</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> http<span class="op">.</span><span class="fu">build</span><span class="op">();</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="kw">...</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p><strong>Allow certain roles on some webservice methods:</strong>
+(<code>@EnableMethodSecurity()</code>)</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="at">@Configuration</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="at">@EnableMethodSecurity</span><span class="op">(</span>prePostEnabled <span class="op">=</span> <span class="kw">true</span><span class="op">,</span> securedEnabled <span class="op">=</span> <span class="kw">true</span><span class="op">,</span> jsr250Enabled <span class="op">=</span> <span class="kw">true</span><span class="op">)</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> SecurityConfig <span class="op">{</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">@RolesAllowed</span><span class="op">(</span><span class="st">&quot;ROLE_VIEWER&quot;</span><span class="op">)</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="bu">String</span> <span class="fu">getUser</span><span class="op">();</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">@RolesAllowed</span><span class="op">({</span> <span class="st">&quot;ROLE_ADMIN&quot;</span><span class="op">,</span> <span class="st">&quot;ROLE_EDITOR&quot;</span> <span class="op">})</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">deleteUser</span><span class="op">();</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h4 id="csrf-cross-site-request-forgery">CSRF: Cross Site Request
+Forgery</h4>
+<p>CSRF is an attack where an attacker tricks a user’s browser into
+making an unintended and unauthorized request to a different website,
+exploiting the user’s authenticated session.</p>
+<p><strong>How to defend against CSRF?</strong></p>
+<p>Make distinction between real and fake HTTP-request by using a
+<strong>Synchronizer Token Pattern</strong> or
+<strong>SameSite-attribute cookie</strong>.</p>
+<p>Both methods generate a token for the client on login. Then every
+time the client interacts with the server, the client includes that
+token in its request. On every request, the server will validate if it
+received a valid token. These tokens have a certain expiration date to
+avoid problems upon token theft.</p>
+<blockquote>
+<p>💡: In Spring, CSRF security is enabled by default.</p>
+</blockquote>
+            </div>
+    </div>
+  </div>
+  <script src="https://vjs.zencdn.net/5.4.4/video.js"></script>
+
+</body>
+</html>
