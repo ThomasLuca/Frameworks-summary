@@ -309,3 +309,53 @@ On every request, the server will validate if it received a valid token. These t
 
 ---
 
+## 2. ORM
+
+### 2.1 ORM: Object Relational Mapping
+
+ORM is a programming technique that allows devs to work with objects in the code while transparently persisting and retrieving data from a relational database.
+It allows devs to define how objects/classes map to database tables and vice versa. Each object corresponds to a table in the database.
+
+#### Object-relational impedance mismatch
+
+There are a lot of concepts in OOP that resembles the structure of Relational databases:
+- Identities
+- Relations
+- Inheritance
+
+There are a couple requirements to be able to map an object to a DB.
+
+1. Object must have same *Primary Key* as DB table.
+2. Relationships should be the same
+3. Each field of the object should map to column in the database
+
+#### ORM in java
+
+Using the *JPA (Java Persistence API)*. Every dataclass must be a Java Bean.
+
+```java
+@Entity
+@Table(name = "sportclub")
+public class Sportclub {
+  private Long id;
+  private String name;
+
+  @Id
+  @GeneratedValue(strategy=GenerationType.IDENTITY)
+  public Long getId() { return id; }
+  public void setId(Long id) { this.id = id;
+  }
+
+  public String getName() { return name; }
+  public void setName(String name) { this.name = name; }
+}
+```
+
+There are a couple different strategies to assign a new Primary Key:
+
+* AUTO: Automatically choose strategy
+* IDENTITY: Relies on an auto-incremented column in the database
+* SEQUENCE: Utilizes a database sequence to generate primary key
+* TABLE: Requires an extra table to keep track of the next available id
+
+

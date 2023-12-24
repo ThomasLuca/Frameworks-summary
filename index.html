@@ -147,6 +147,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <li><a href="#webservices-security"
         id="toc-webservices-security">1.5 Webservices security</a></li>
         </ul></li>
+        <li><a href="#orm" id="toc-orm">2. ORM</a>
+        <ul>
+        <li><a href="#orm-object-relational-mapping"
+        id="toc-orm-object-relational-mapping">2.1 ORM: Object
+        Relational Mapping</a></li>
+        </ul></li>
         </ul></li>
         </ul>
 
@@ -465,6 +471,54 @@ avoid problems upon token theft.</p>
 <blockquote>
 <p>💡: In Spring, CSRF security is enabled by default.</p>
 </blockquote>
+<hr />
+<h2 id="orm">2. ORM</h2>
+<h3 id="orm-object-relational-mapping">2.1 ORM: Object Relational
+Mapping</h3>
+<p>ORM is a programming technique that allows devs to work with objects
+in the code while transparently persisting and retrieving data from a
+relational database. It allows devs to define how objects/classes map to
+database tables and vice versa. Each object corresponds to a table in
+the database.</p>
+<h4 id="object-relational-impedance-mismatch">Object-relational
+impedance mismatch</h4>
+<p>There are a lot of concepts in OOP that resembles the structure of
+Relational databases: - Identities - Relations - Inheritance</p>
+<p>There are a couple requirements to be able to map an object to a
+DB.</p>
+<ol type="1">
+<li>Object must have same <em>Primary Key</em> as DB table.</li>
+<li>Relationships should be the same</li>
+<li>Each field of the object should map to column in the database</li>
+</ol>
+<h4 id="orm-in-java">ORM in java</h4>
+<p>Using the <em>JPA (Java Persistence API)</em>. Every dataclass must
+be a Java Bean.</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="at">@Entity</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="at">@Table</span><span class="op">(</span>name <span class="op">=</span> <span class="st">&quot;sportclub&quot;</span><span class="op">)</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> Sportclub <span class="op">{</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="bu">Long</span> id<span class="op">;</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="bu">String</span> name<span class="op">;</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">@Id</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">@GeneratedValue</span><span class="op">(</span>strategy<span class="op">=</span>GenerationType<span class="op">.</span><span class="fu">IDENTITY</span><span class="op">)</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="bu">Long</span> <span class="fu">getId</span><span class="op">()</span> <span class="op">{</span> <span class="cf">return</span> id<span class="op">;</span> <span class="op">}</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">setId</span><span class="op">(</span><span class="bu">Long</span> id<span class="op">)</span> <span class="op">{</span> <span class="kw">this</span><span class="op">.</span><span class="fu">id</span> <span class="op">=</span> id<span class="op">;</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="bu">String</span> <span class="fu">getName</span><span class="op">()</span> <span class="op">{</span> <span class="cf">return</span> name<span class="op">;</span> <span class="op">}</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">setName</span><span class="op">(</span><span class="bu">String</span> name<span class="op">)</span> <span class="op">{</span> <span class="kw">this</span><span class="op">.</span><span class="fu">name</span> <span class="op">=</span> name<span class="op">;</span> <span class="op">}</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>There are a couple different strategies to assign a new Primary
+Key:</p>
+<ul>
+<li>AUTO: Automatically choose strategy</li>
+<li>IDENTITY: Relies on an auto-incremented column in the database</li>
+<li>SEQUENCE: Utilizes a database sequence to generate primary key</li>
+<li>TABLE: Requires an extra table to keep track of the next available
+id</li>
+</ul>
             </div>
     </div>
   </div>
