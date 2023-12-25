@@ -152,6 +152,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <li><a href="#orm-object-relational-mapping"
         id="toc-orm-object-relational-mapping">2.1 ORM: Object
         Relational Mapping</a></li>
+        <li><a href="#jpa-in-spring" id="toc-jpa-in-spring">2.2 JPA in
+        Spring</a></li>
         </ul></li>
         </ul></li>
         </ul>
@@ -519,6 +521,61 @@ Key:</p>
 <li>TABLE: Requires an extra table to keep track of the next available
 id</li>
 </ul>
+<h3 id="jpa-in-spring">2.2 JPA in Spring</h3>
+<figure>
+<img src="./img/jpa-config.png" alt="JPA configuration" />
+<figcaption aria-hidden="true">JPA configuration</figcaption>
+</figure>
+<h4 id="jpa-repository">JPA Repository</h4>
+<p>The <code>JpaRepository</code> is an interface that is a
+CRUD-repository with extra functionalities for performing database
+operations.</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Typically defined in a single file (like ProductRepository.java)</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">interface</span> ProductRepository <span class="kw">extends</span> JpaRepository<span class="op">&lt;</span>Product<span class="op">,</span> <span class="bu">Long</span><span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>      <span class="bu">List</span><span class="op">&lt;</span>Product<span class="op">&gt;</span> <span class="fu">findByCategory</span><span class="op">(</span><span class="bu">String</span> category<span class="op">);</span> <span class="co">// Optional custom user-defined queries</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Example usage of build-in queries:</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ProductDao.java</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="at">@Service</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> ProductDao<span class="op">{</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="dt">final</span> ProductRepository repo<span class="op">;</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="fu">ProductDao</span><span class="op">(</span>ProductRepository repository<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span><span class="fu">repo</span> <span class="op">=</span> repository<span class="op">;</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="bu">List</span><span class="op">&lt;</span>Product<span class="op">&gt;</span> <span class="fu">getProductsByCategory</span><span class="op">(</span><span class="bu">String</span> category<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> productRepository<span class="op">.</span><span class="fu">findByCategory</span><span class="op">(</span>category<span class="op">);</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> Product <span class="fu">getProductById</span><span class="op">(</span><span class="dt">long</span> id<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> repo<span class="op">.</span><span class="fu">findById</span><span class="op">(</span>id<span class="op">).</span><span class="fu">orElse</span><span class="op">(</span><span class="kw">null</span><span class="op">);</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">addProduct</span><span class="op">(</span>Product p<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    repo<span class="op">.</span><span class="fu">save</span><span class="op">(</span>addProduct<span class="op">);</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>List of build-in methods:</p>
+<ul>
+<li><code>save</code>: save new object</li>
+<li><code>findAll</code>: return all entities</li>
+<li><code>findAllById</code>: return all with certain id</li>
+<li><code>flush</code>: write changes to DB</li>
+<li><code>saveAll</code>: Save list of objects</li>
+<li><code>delete</code>, <code>deleteAll</code>: remove
+entity/entities</li>
+<li><code>existById</code>: does entity exist?</li>
+</ul>
+<blockquote>
+<p>⚠️: Using a JPA requires some configuration in
+<code>application.properties</code></p>
+</blockquote>
+<pre class="text"><code>spring.datasource.url=jdbc:mysql://localhost:3306/dudosdb?serverTimezone=UTC
+spring.datasource.username=TLuca
+spring.datasource.password=&lt;redacted&gt;</code></pre>
             </div>
     </div>
   </div>

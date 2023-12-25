@@ -358,4 +358,63 @@ There are a couple different strategies to assign a new Primary Key:
 * SEQUENCE: Utilizes a database sequence to generate primary key
 * TABLE: Requires an extra table to keep track of the next available id
 
+### 2.2 JPA in Spring
+
+![JPA configuration](./img/jpa-config.png)
+
+#### JPA Repository
+
+The ` JpaRepository` is an interface that is a CRUD-repository with extra functionalities for performing database operations.
+
+```java
+// Typically defined in a single file (like ProductRepository.java)
+public interface ProductRepository extends JpaRepository<Product, Long> {
+      List<Product> findByCategory(String category); // Optional custom user-defined queries
+}
+```
+
+Example usage of build-in queries:
+
+```java
+// ProductDao.java
+@Service
+public class ProductDao{
+  private final ProductRepository repo;
+
+  public ProductDao(ProductRepository repository) {
+      this.repo = repository;
+  }
+
+  public List<Product> getProductsByCategory(String category) {
+    return productRepository.findByCategory(category);
+  }
+
+  public Product getProductById(long id) {
+    return repo.findById(id).orElse(null);
+  }
+
+  public void addProduct(Product p) {
+    repo.save(addProduct);
+  }
+}
+```
+
+List of build-in methods:
+
+- `save`: save new object
+- `findAll`: return all entities
+- `findAllById`: return all with certain id
+- `flush`: write changes to DB
+- `saveAll`: Save list of objects
+- `delete`, `deleteAll`: remove entity/entities
+- `existById`: does entity exist?
+
+
+> ⚠️: Using a JPA requires some configuration in `application.properties`
+
+```text
+spring.datasource.url=jdbc:mysql://localhost:3306/dudosdb?serverTimezone=UTC
+spring.datasource.username=TLuca
+spring.datasource.password=<redacted>
+```
 
