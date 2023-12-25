@@ -154,6 +154,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         Relational Mapping</a></li>
         <li><a href="#jpa-in-spring" id="toc-jpa-in-spring">2.2 JPA in
         Spring</a></li>
+        <li><a href="#orm-inheritance" id="toc-orm-inheritance">2.3 ORM
+        Inheritance</a></li>
+        <li><a href="#orm-associations-value-objects"
+        id="toc-orm-associations-value-objects">2.4 ORM associations:
+        value-objects</a></li>
+        <li><a href="#orm-associations-relations"
+        id="toc-orm-associations-relations">2.5 ORM associations:
+        relations</a></li>
+        <li><a href="#how-does-jpa-work" id="toc-how-does-jpa-work">2.6
+        How does JPA work?</a></li>
         </ul></li>
         </ul></li>
         </ul>
@@ -576,6 +586,129 @@ entity/entities</li>
 <pre class="text"><code>spring.datasource.url=jdbc:mysql://localhost:3306/dudosdb?serverTimezone=UTC
 spring.datasource.username=TLuca
 spring.datasource.password=&lt;redacted&gt;</code></pre>
+<h3 id="orm-inheritance">2.3 ORM Inheritance</h3>
+<p>There are different annotation to indicate what type of inheritance
+an object is subject to.</p>
+<ul>
+<li><code>@Inheritance(strategy = ...)</code>: Sets how entities are
+stored in the DB (default = <code>SINGLE_TABLE</code>)</li>
+<li><code>@DiscriminatorColumn(name = "...", discriminatorType= ...)</code>:
+Defines a column that distinguishes entity types in a single table
+inheritance strategy.</li>
+<li><code>@DiscriminatorValue("K")</code>: Assigns a specific value to
+differentiate an entity type in a single table inheritance setup</li>
+<li><code>@PrimaryKeyJoinColumn(name = "...")</code>: Maps a parent
+table’s primary key as a foreign key in the child table in joined table
+inheritance.</li>
+</ul>
+<h3 id="orm-associations-value-objects">2.4 ORM associations:
+value-objects</h3>
+<p>Associations:</p>
+<ul>
+<li>Direction:
+<ul>
+<li>Unidirectional</li>
+<li>Bidirectional</li>
+</ul></li>
+<li>Multiplicity:
+<ul>
+<li>1-to-1</li>
+<li>1-to-many</li>
+<li>many-to-many</li>
+</ul></li>
+</ul>
+<p>Value-objects criteria:</p>
+<ul>
+<li>Value-obj belongs to just one entity</li>
+<li>Entity disappears -&gt; value-object disappears</li>
+<li>An entity has an <em>identifier</em></li>
+</ul>
+<h4 id="value-object-example">Value-object example</h4>
+<figure>
+<img src="./img/example-value-obj.png" alt="Example value-obj" />
+<figcaption aria-hidden="true">Example value-obj</figcaption>
+</figure>
+<p>It doesn’t make sense to save the value-object (<code>Address</code>)
+in a separate table. So we can store the <code>Address</code> in the
+same table in multiple <code>Embedded columns</code>.</p>
+<p>We would also like to make an association to a separate table
+containing all the email addresses.</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="at">@Embeddable</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> Address <span class="op">{</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> <span class="bu">String</span> street<span class="op">;</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> <span class="bu">String</span> city<span class="op">;</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> <span class="bu">String</span> state<span class="op">;</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> <span class="bu">String</span> zipCode<span class="op">;</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Getters, setters, constructors, etc.</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="at">@Entity</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="at">@Table</span><span class="op">(</span>name <span class="op">=</span> <span class="st">&quot;sportclub&quot;</span><span class="op">)</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> sportclub <span class="op">{</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">@Id</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="bu">Long</span> id<span class="op">;</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="bu">String</span> name<span class="op">;</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">@Embedded</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> Address address<span class="op">;</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">@ElementCollection</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">@CollectionTable</span><span class="op">(</span>name <span class="op">=</span> <span class="st">&quot;emailaddresses&quot;</span><span class="op">,</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>  joinColumns <span class="op">=</span> <span class="at">@JoinColumn</span><span class="op">(</span>name <span class="op">=</span> <span class="st">&quot;sportclub&quot;</span><span class="op">))</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">@Column</span><span class="op">(</span>name<span class="op">=</span><span class="st">&quot;email&quot;</span><span class="op">)</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 id="orm-associations-relations">2.5 ORM associations: relations</h3>
+<p>Different mappings of associations of entities:</p>
+<ol type="1">
+<li>One-to-One Relationship:</li>
+</ol>
+<ul>
+<li><code>@OneToOne</code>: Defines a one-to-one relationship between
+two entities.</li>
+<li><code>@JoinColumn</code>: Specifies the column used for joining two
+entities in a one-to-one relationship.</li>
+</ul>
+<ol start="2" type="1">
+<li>One-to-Many Relationship:</li>
+</ol>
+<ul>
+<li><code>@OneToMany</code>: Represents a one-to-many relationship
+between two entities.</li>
+<li><code>@JoinColumn</code> (within <code>@OneToMany</code>): Specifies
+the column in the “many” side entity to join with the “one” side
+entity.</li>
+</ul>
+<ol start="3" type="1">
+<li>Many-to-One Relationship:</li>
+</ol>
+<ul>
+<li><code>@ManyToOne</code>: Specifies a many-to-one relationship
+between two entities.</li>
+<li><code>@JoinColumn</code> (within <code>@ManyToOne</code>): Specifies
+the column in the “many” side entity that references the “one” side
+entity.</li>
+</ul>
+<ol start="4" type="1">
+<li>Many-to-Many Relationship:</li>
+</ol>
+<ul>
+<li><code>@ManyToMany</code>: Defines a many-to-many relationship
+between two entities.</li>
+<li><code>@JoinTable</code>: Specifies the join table for the
+many-to-many relationship, defining the columns and their mappings.</li>
+</ul>
+<p>For detailed examples of relations (with annotation parameters) see:
+<a href="https://www.baeldung.com/jpa-hibernate-associations"
+class="uri">https://www.baeldung.com/jpa-hibernate-associations</a></p>
+<h3 id="how-does-jpa-work">2.6 How does JPA work?</h3>
+<figure>
+<img src="./img/jpa-operation.png" alt="JPA operation" />
+<figcaption aria-hidden="true">JPA operation</figcaption>
+</figure>
+<blockquote>
+<p>❗: TODO</p>
+</blockquote>
+<hr />
             </div>
     </div>
   </div>

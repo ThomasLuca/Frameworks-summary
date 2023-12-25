@@ -418,3 +418,92 @@ spring.datasource.username=TLuca
 spring.datasource.password=<redacted>
 ```
 
+### 2.3 ORM Inheritance
+
+There are different annotation to indicate what type of inheritance an object is subject to.
+
+- `@Inheritance(strategy = ...)`: Sets how entities are stored in the DB (default = `SINGLE_TABLE`)
+- `@DiscriminatorColumn(name = "...", discriminatorType= ...)`: Defines a column that distinguishes entity types in a single table inheritance strategy.
+- `@DiscriminatorValue("K")`: Assigns a specific value to differentiate an entity type in a single table inheritance setup
+- `@PrimaryKeyJoinColumn(name = "...")`: Maps a parent table's primary key as a foreign key in the child table in joined table inheritance.
+
+
+### 2.4 ORM associations: value-objects
+
+Associations:
+
+- Direction:
+  - Unidirectional
+  - Bidirectional
+- Multiplicity:
+  - 1-to-1
+  - 1-to-many
+  - many-to-many
+
+Value-objects criteria:
+
+- Value-obj belongs to just one entity
+- Entity disappears -> value-object disappears
+- An entity has an *identifier*
+
+#### Value-object example
+
+![Example value-obj](./img/example-value-obj.png)
+
+It doesn't make sense to save the value-object (`Address`) in a separate table. So we can store the `Address` in the same table in multiple `Embedded columns`.
+
+We would also like to make an association to a separate table containing all the email addresses.
+
+```java
+@Embeddable
+public class Address {
+    private String street;
+    private String city;
+    private String state;
+    private String zipCode;
+    // Getters, setters, constructors, etc.
+}
+
+@Entity
+@Table(name = "sportclub")
+public class sportclub {
+  @Id
+  private Long id;
+  private String name;
+  @Embedded
+  private Address address;
+
+  @ElementCollection
+  @CollectionTable(name = "emailaddresses",
+  joinColumns = @JoinColumn(name = "sportclub"))
+  @Column(name="email")
+}
+```
+
+### 2.5 ORM associations: relations
+
+Different mappings of associations of entities:
+
+1. One-to-One Relationship:
+  - `@OneToOne`: Defines a one-to-one relationship between two entities.
+  - `@JoinColumn`: Specifies the column used for joining two entities in a one-to-one relationship.
+2. One-to-Many Relationship:
+  - `@OneToMany`: Represents a one-to-many relationship between two entities.
+  - `@JoinColumn` (within `@OneToMany`): Specifies the column in the "many" side entity to join with the "one" side entity.
+3. Many-to-One Relationship:
+  - `@ManyToOne`: Specifies a many-to-one relationship between two entities.
+  - `@JoinColumn` (within `@ManyToOne`): Specifies the column in the "many" side entity that references the "one" side entity.
+4. Many-to-Many Relationship:
+  - `@ManyToMany`: Defines a many-to-many relationship between two entities.
+  - `@JoinTable`: Specifies the join table for the many-to-many relationship, defining the columns and their mappings.
+
+For detailed examples of relations (with annotation parameters) see: <https://www.baeldung.com/jpa-hibernate-associations>
+
+### 2.6 How does JPA work?
+
+![JPA operation](./img/jpa-operation.png)
+
+> ❗: TODO
+
+---
+
