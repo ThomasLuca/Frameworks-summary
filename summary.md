@@ -824,3 +824,139 @@ public class ClientTestWebflux {
 
 ---
 
+## 6. JDBC
+
+**JDBC (Java Database Connectivity API)**
+: An API that allows Java applications to interact with databases.
+
+- Accesses SQL-compatible relational databases from Java application
+- Can perform SQL-queries and process data
+- Abstraction for common database functions
+- Same application should work on different databases (no need to rewrite backend)
+
+### 6.1 JDBC drivers
+
+![JDBC driver types](./img/JDBC-drivers.png)
+
+### 6.2 JDBC Example
+
+#### Configuration
+ 
+db_constants.properties
+
+```text
+# info databank
+username=TLuca
+password=<redacted>
+driver=org.postgresql.Driver
+connectionstring=jdbc:postgresql://localhost:5432/db_name
+
+#Constanten for table products
+Q_select_products=select * from products
+Q_select_product=select * from products where productCode = ?
+
+# Mappings to column names
+prod_code=productCode
+prod_name=productName
+prod_price=buyPrice
+prod_msrp=MSRP
+```
+
+#### Making connection
+
+```java
+@Component
+@PropertySource("classpath:databankconstanten.properties")
+public class JDBCDataStorage implements IDataStorage {
+  @Value("${connectionstring}")
+  private String connString;
+  @Value("${username}")
+  private String login;
+  @Value("${password}")
+  private String password;
+
+  // Columns
+  @Value("${prod_code}")
+  private String prodCode;
+  @Value("${prod_name}")
+  private String prodName;
+  @Value("${prod_price}")
+  private String prodPrice;
+  @Value("${prod_msrp}")
+  private String prodMsrp;
+
+  // SQL-queries
+  @Value("${Q_select_products}")
+  private String selectProducts;
+
+
+  private DataSource dataSource;
+
+  @Autowired
+  public void setDataSource(DataSource dataSource) {
+      this.dataSource = dataSource;
+  }
+
+  private Connection openConnectie() throws SQLException {
+      return dataSource.getConnection();
+  }
+}
+```
+
+#### Performing actions (GET) on database
+
+```java
+public List<IProduct> getProducts() throws DataException { // DataException is custom class
+  List<IProduct> products;
+
+  try (Connection conn = openConnectie(); Statement stmt = conn.createStatement()) {
+    System.out.println(conn.getClass());
+    System.out.println(stmt.getClass());
+    ResultSet rs = stmt.executeQuery(selectProducts);
+    System.out.println(rs.getClass());
+    products = new ArrayList<>();
+    while (rs.next()) {
+      products.add(createProduct(rs));
+    }
+  } catch (SQLException ex) {
+    throw new DataExceptie(foutProducts);
+  }
+  return products;
+}
+```
+
+### 6.3 SQL-injection
+
+When using prepared statements, we possibly expose the application to SQL-injection.
+We can defend ourself against this vulnerability by working with parameters:
+
+```java
+String username = getUserInput();
+String sql = "SELECT * FROM users WHERE username = ?";
+PreparedStatement preparedStatement = connection.prepareStatement(sql);
+preparedStatement.setString(1, username);
+ResultSet resultSet = preparedStatement.executeQuery();
+```
+
+### 6.4 Driver vs DataSource
+
+**DataSource**:
+
+- Spring
+- Represents a DBMS
+- Available through dependency injection or JNDI
+- Safer than driver: No configuration in code.
+
+### 6.5 ORM v JDBC
+
+- JDBC/ADO.NET:
+  - Time-intensive
+  - Low-level data-access
+- ORM
+  - Defining a mapping with annotations
+  - Less performant
+  - Faster dev time
+
+---
+
+

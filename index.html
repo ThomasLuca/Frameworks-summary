@@ -190,6 +190,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <li><a href="#reactor-java" id="toc-reactor-java">5.3 Reactor
         Java</a></li>
         </ul></li>
+        <li><a href="#jdbc" id="toc-jdbc">6. JDBC</a>
+        <ul>
+        <li><a href="#jdbc-drivers" id="toc-jdbc-drivers">6.1 JDBC
+        drivers</a></li>
+        <li><a href="#jdbc-example" id="toc-jdbc-example">6.2 JDBC
+        Example</a></li>
+        <li><a href="#sql-injection" id="toc-sql-injection">6.3
+        SQL-injection</a></li>
+        <li><a href="#driver-vs-datasource"
+        id="toc-driver-vs-datasource">6.4 Driver vs DataSource</a></li>
+        <li><a href="#orm-v-jdbc" id="toc-orm-v-jdbc">6.5 ORM v
+        JDBC</a></li>
+        </ul></li>
         </ul></li>
         </ul>
 
@@ -1079,6 +1092,135 @@ class="sourceCode java"><code class="sourceCode java"><span id="cb27-1"><a href=
 <span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">System</span><span class="op">.</span><span class="fu">out</span><span class="op">.</span><span class="fu">println</span><span class="op">(</span><span class="st">&quot;in test webflux&quot;</span><span class="op">);</span></span>
 <span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
 <span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<hr />
+<h2 id="jdbc">6. JDBC</h2>
+<dl>
+<dt><strong>JDBC (Java Database Connectivity API)</strong></dt>
+<dd>
+An API that allows Java applications to interact with databases.
+</dd>
+</dl>
+<ul>
+<li>Accesses SQL-compatible relational databases from Java
+application</li>
+<li>Can perform SQL-queries and process data</li>
+<li>Abstraction for common database functions</li>
+<li>Same application should work on different databases (no need to
+rewrite backend)</li>
+</ul>
+<h3 id="jdbc-drivers">6.1 JDBC drivers</h3>
+<figure>
+<img src="./img/JDBC-drivers.png" alt="JDBC driver types" />
+<figcaption aria-hidden="true">JDBC driver types</figcaption>
+</figure>
+<h3 id="jdbc-example">6.2 JDBC Example</h3>
+<h4 id="configuration">Configuration</h4>
+<p>db_constants.properties</p>
+<pre class="text"><code># info databank
+username=TLuca
+password=&lt;redacted&gt;
+driver=org.postgresql.Driver
+connectionstring=jdbc:postgresql://localhost:5432/db_name
+
+#Constanten for table products
+Q_select_products=select * from products
+Q_select_product=select * from products where productCode = ?
+
+# Mappings to column names
+prod_code=productCode
+prod_name=productName
+prod_price=buyPrice
+prod_msrp=MSRP</code></pre>
+<h4 id="making-connection">Making connection</h4>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="at">@Component</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="at">@PropertySource</span><span class="op">(</span><span class="st">&quot;classpath:databankconstanten.properties&quot;</span><span class="op">)</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> JDBCDataStorage <span class="kw">implements</span> IDataStorage <span class="op">{</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">@Value</span><span class="op">(</span><span class="st">&quot;${connectionstring}&quot;</span><span class="op">)</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="bu">String</span> connString<span class="op">;</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">@Value</span><span class="op">(</span><span class="st">&quot;${username}&quot;</span><span class="op">)</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="bu">String</span> login<span class="op">;</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">@Value</span><span class="op">(</span><span class="st">&quot;${password}&quot;</span><span class="op">)</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="bu">String</span> password<span class="op">;</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Columns</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">@Value</span><span class="op">(</span><span class="st">&quot;${prod_code}&quot;</span><span class="op">)</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="bu">String</span> prodCode<span class="op">;</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">@Value</span><span class="op">(</span><span class="st">&quot;${prod_name}&quot;</span><span class="op">)</span></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="bu">String</span> prodName<span class="op">;</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">@Value</span><span class="op">(</span><span class="st">&quot;${prod_price}&quot;</span><span class="op">)</span></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="bu">String</span> prodPrice<span class="op">;</span></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">@Value</span><span class="op">(</span><span class="st">&quot;${prod_msrp}&quot;</span><span class="op">)</span></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="bu">String</span> prodMsrp<span class="op">;</span></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>  <span class="co">// SQL-queries</span></span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">@Value</span><span class="op">(</span><span class="st">&quot;${Q_select_products}&quot;</span><span class="op">)</span></span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="bu">String</span> selectProducts<span class="op">;</span></span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="bu">DataSource</span> dataSource<span class="op">;</span></span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">@Autowired</span></span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">setDataSource</span><span class="op">(</span><span class="bu">DataSource</span> dataSource<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span><span class="fu">dataSource</span> <span class="op">=</span> dataSource<span class="op">;</span></span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="bu">Connection</span> <span class="fu">openConnectie</span><span class="op">()</span> <span class="kw">throws</span> <span class="bu">SQLException</span> <span class="op">{</span></span>
+<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> dataSource<span class="op">.</span><span class="fu">getConnection</span><span class="op">();</span></span>
+<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h4 id="performing-actions-get-on-database">Performing actions (GET) on
+database</h4>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="bu">List</span><span class="op">&lt;</span>IProduct<span class="op">&gt;</span> <span class="fu">getProducts</span><span class="op">()</span> <span class="kw">throws</span> DataException <span class="op">{</span> <span class="co">// DataException is custom class</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">List</span><span class="op">&lt;</span>IProduct<span class="op">&gt;</span> products<span class="op">;</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">try</span> <span class="op">(</span><span class="bu">Connection</span> conn <span class="op">=</span> <span class="fu">openConnectie</span><span class="op">();</span> <span class="bu">Statement</span> stmt <span class="op">=</span> conn<span class="op">.</span><span class="fu">createStatement</span><span class="op">())</span> <span class="op">{</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">System</span><span class="op">.</span><span class="fu">out</span><span class="op">.</span><span class="fu">println</span><span class="op">(</span>conn<span class="op">.</span><span class="fu">getClass</span><span class="op">());</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">System</span><span class="op">.</span><span class="fu">out</span><span class="op">.</span><span class="fu">println</span><span class="op">(</span>stmt<span class="op">.</span><span class="fu">getClass</span><span class="op">());</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">ResultSet</span> rs <span class="op">=</span> stmt<span class="op">.</span><span class="fu">executeQuery</span><span class="op">(</span>selectProducts<span class="op">);</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">System</span><span class="op">.</span><span class="fu">out</span><span class="op">.</span><span class="fu">println</span><span class="op">(</span>rs<span class="op">.</span><span class="fu">getClass</span><span class="op">());</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>    products <span class="op">=</span> <span class="kw">new</span> <span class="bu">ArrayList</span><span class="op">&lt;&gt;();</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>rs<span class="op">.</span><span class="fu">next</span><span class="op">())</span> <span class="op">{</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>      products<span class="op">.</span><span class="fu">add</span><span class="op">(</span><span class="fu">createProduct</span><span class="op">(</span>rs<span class="op">));</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span> <span class="cf">catch</span> <span class="op">(</span><span class="bu">SQLException</span> ex<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">throw</span> <span class="kw">new</span> <span class="fu">DataExceptie</span><span class="op">(</span>foutProducts<span class="op">);</span></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> products<span class="op">;</span></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 id="sql-injection">6.3 SQL-injection</h3>
+<p>When using prepared statements, we possibly expose the application to
+SQL-injection. We can defend ourself against this vulnerability by
+working with parameters:</p>
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="bu">String</span> username <span class="op">=</span> <span class="fu">getUserInput</span><span class="op">();</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="bu">String</span> sql <span class="op">=</span> <span class="st">&quot;SELECT * FROM users WHERE username = ?&quot;</span><span class="op">;</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="bu">PreparedStatement</span> preparedStatement <span class="op">=</span> connection<span class="op">.</span><span class="fu">prepareStatement</span><span class="op">(</span>sql<span class="op">);</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>preparedStatement<span class="op">.</span><span class="fu">setString</span><span class="op">(</span><span class="dv">1</span><span class="op">,</span> username<span class="op">);</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="bu">ResultSet</span> resultSet <span class="op">=</span> preparedStatement<span class="op">.</span><span class="fu">executeQuery</span><span class="op">();</span></span></code></pre></div>
+<h3 id="driver-vs-datasource">6.4 Driver vs DataSource</h3>
+<p><strong>DataSource</strong>:</p>
+<ul>
+<li>Spring</li>
+<li>Represents a DBMS</li>
+<li>Available through dependency injection or JNDI</li>
+<li>Safer than driver: No configuration in code.</li>
+</ul>
+<h3 id="orm-v-jdbc">6.5 ORM v JDBC</h3>
+<ul>
+<li>JDBC/ADO.NET:
+<ul>
+<li>Time-intensive</li>
+<li>Low-level data-access</li>
+</ul></li>
+<li>ORM
+<ul>
+<li>Defining a mapping with annotations</li>
+<li>Less performant</li>
+<li>Faster dev time</li>
+</ul></li>
+</ul>
 <hr />
             </div>
     </div>
