@@ -692,4 +692,32 @@ module.exports = router;
 
 ---
 
+## 4. Websockets
+
+**Websocket**
+: Websockets is a communication protocol that provides full-duplex, persistent, communication channels over a single, long-lived TCP connection. It's designed to enable real-time communication between a client, typically a web browser, and a server.
+
+WS client example:
+
+```js
+let ws = new WebSocket("ws://www.websockets.org")
+
+// Open connection
+ws.addEventListener('open', (event) => { ws.send("Hello server!") })
+// Listen for incoming messages
+ws.addEventListener('message', (event) => { console.log(event.data) })
+// Send a message
+ws.send("Hello")
+// Server closes connection
+ws.addEventListener('close', (event) => { alert("closed") })
+// Client closes connection
+ws.close()
+```
+
+Before websockets, clients used `polling` to achieve the same functionality.
+Websockets, however, have less latency and overhead which makes the way more efficient.
+
+![Websocket vs Polling](./img/ws-vs-polling.png)
+
+---
 
