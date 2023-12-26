@@ -1088,7 +1088,7 @@ adapter.Fill(customerDS, TABLE_ORDERS);
 ```csharp
 using (DbConnection conn = ...) {
   conn.Open();
-  
+ 
   // Basic transaction
   using (DbTransaction trans = conn.BeginTransaction())
   {
@@ -1105,3 +1105,105 @@ using (DbConnection conn = ...) {
   }
 }
 ```
+
+---
+
+## 8. REST-services in .NET
+
+### 8.1 Web API
+
+The .NET alternative to the Spring framework for REST-services is ASP.NET.
+It makes it possible to easily create a HTTP service that exposes  an application's functionality and data as services over the internet using standard HTTP methods (GET, POST, PUT, DELETE, etc.) and data formats like JSON or XML.
+
+![ASP.NET architecture](./img/asp-mvc.png)
+
+#### Example
+
+Controllers/PrimateController.cs
+
+```csharp
+[Route("api/ape_species")]
+[ApiController]
+public class PrimateController : ControllerBase {
+
+  private readonly PrimateContext _context;
+
+  public PrimateController(PrimateSpeciesContext ctx) {
+    _context = ctx;
+    if(_context.PrimateSpecies.Count() == 0) {
+      _context.PrimateSpecies.Add(new PrimateSpecies { Name = "Black Spider Monkey"});
+      _context.SaveChanges();
+    }
+  }
+  
+  [HttpGet]
+  public IEnumerable<string> Get() {...}
+  
+  [HttpGet("{id}")]
+  public async Task<ActionResult<PrimateSpecies> GetSpeciesById(long id) {
+    var species = await _context.PrimateSpeciesCollection.FindAsync(id);
+    if (species == null) { return NotFound(); }
+    return species;
+  }
+
+  [HttpPost]
+  public async Task<ActionResult<PrimateSpecies>> PostPrimate(PrimateSpecies species) {
+    _context.PrimateSpeciesCollection.Add(species);
+    await _context.SaveChangesAsync();
+    return CreatedAtAction("GetSpeciesById", new { id = species.Id}, species);
+  }
+  
+  [HttpDelete("{id}")]
+  public async Task<ActionResult<PrimateSpecies>> DeletePrimateSpecies(long id) {
+    var species = await _context.PrimateSpeciesCollection.FindAsync(id);
+    if (species == null) { return NotFound(); }
+    _context.SapienSpeciesCollection.Remove(species);
+    await _context.SaveChangesAsync();
+    return species;
+  }
+}
+```
+
+Modes/DbContext.cs
+
+```csharp
+public class PrimateSpeciesContext: DbContext {
+  public PrimateSpeciesContext(DbContextOptions<PrimateSpeciesContext> options) : base(options) { }
+
+  public DbSet<PrimateSpecies> SapienSpeciesCollection { get; set; }
+}
+```
+
+Models/PrimateSpecies.cs
+
+```csharp
+nanespace vbWebAPI.Models {
+  public class PrimateSpecies {
+    public long Id { get; set; }
+    [Required]
+    public string Name {get; set; }
+    [DefaultValue(false)]
+    public bool IsComplete { get; set; }
+  }
+}
+```
+
+### 8.2 OpenAPI specification
+
+- Format to describe a REST-webservice
+  - Info: licence, contact, ...
+  - Servers: Which URL's are available
+  - Security: Which security mechanisms are implemented
+  - Pahts: The different endpoints (+ Methods)
+  - Tags: to group paths
+  - ExternlDocs: reference to docs
+- In JSON or YAML
+
+![OpenAPI 3.0](./img/OpenAPI.png)
+
+#### Swagger
+
+JSON is easy to automatically generate JSON using [swagger.io](https://swagger.io/).
+
+> 💡: Swagger can also interpret commets in code like `javadocs`
+

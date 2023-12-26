@@ -217,6 +217,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <li><a href="#transactions" id="toc-transactions">7.6
         Transactions</a></li>
         </ul></li>
+        <li><a href="#rest-services-in-.net"
+        id="toc-rest-services-in-.net">8. REST-services in .NET</a>
+        <ul>
+        <li><a href="#web-api" id="toc-web-api">8.1 Web API</a></li>
+        <li><a href="#openapi-specification"
+        id="toc-openapi-specification">8.2 OpenAPI
+        specification</a></li>
+        </ul></li>
         </ul></li>
         </ul>
 
@@ -1360,7 +1368,7 @@ class="sourceCode csharp"><code class="sourceCode cs"><span id="cb35-1"><a href=
 <div class="sourceCode" id="cb36"><pre
 class="sourceCode csharp"><code class="sourceCode cs"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="op">(</span>DbConnection conn <span class="op">=</span> <span class="op">...)</span> <span class="op">{</span></span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  conn<span class="op">.</span><span class="fu">Open</span><span class="op">();</span></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a> </span>
 <span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Basic transaction</span></span>
 <span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">using</span> <span class="op">(</span>DbTransaction trans <span class="op">=</span> conn<span class="op">.</span><span class="fu">BeginTransaction</span><span class="op">())</span></span>
 <span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">{</span></span>
@@ -1376,6 +1384,103 @@ class="sourceCode csharp"><code class="sourceCode cs"><span id="cb36-1"><a href=
 <span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
 <span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<hr />
+<h2 id="rest-services-in-.net">8. REST-services in .NET</h2>
+<h3 id="web-api">8.1 Web API</h3>
+<p>The .NET alternative to the Spring framework for REST-services is
+ASP.NET. It makes it possible to easily create a HTTP service that
+exposes an application’s functionality and data as services over the
+internet using standard HTTP methods (GET, POST, PUT, DELETE, etc.) and
+data formats like JSON or XML.</p>
+<figure>
+<img src="./img/asp-mvc.png" alt="ASP.NET architecture" />
+<figcaption aria-hidden="true">ASP.NET architecture</figcaption>
+</figure>
+<h4 id="example-1">Example</h4>
+<p>Controllers/PrimateController.cs</p>
+<div class="sourceCode" id="cb37"><pre
+class="sourceCode csharp"><code class="sourceCode cs"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="op">[</span><span class="fu">Route</span><span class="op">(</span><span class="st">&quot;api/ape_species&quot;</span><span class="op">)]</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="op">[</span>ApiController<span class="op">]</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> PrimateController <span class="op">:</span> ControllerBase <span class="op">{</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="kw">readonly</span> PrimateContext _context<span class="op">;</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="fu">PrimateController</span><span class="op">(</span>PrimateSpeciesContext ctx<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    _context <span class="op">=</span> ctx<span class="op">;</span></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span><span class="op">(</span>_context<span class="op">.</span><span class="fu">PrimateSpecies</span><span class="op">.</span><span class="fu">Count</span><span class="op">()</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>      _context<span class="op">.</span><span class="fu">PrimateSpecies</span><span class="op">.</span><span class="fu">Add</span><span class="op">(</span><span class="kw">new</span> PrimateSpecies <span class="op">{</span> Name <span class="op">=</span> <span class="st">&quot;Black Spider Monkey&quot;</span><span class="op">});</span></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>      _context<span class="op">.</span><span class="fu">SaveChanges</span><span class="op">();</span></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>  <span class="op">[</span>HttpGet<span class="op">]</span></span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> IEnumerable<span class="op">&lt;</span><span class="dt">string</span><span class="op">&gt;</span> <span class="fu">Get</span><span class="op">()</span> <span class="op">{...}</span></span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>  <span class="op">[</span><span class="fu">HttpGet</span><span class="op">(</span><span class="st">&quot;{id}&quot;</span><span class="op">)]</span></span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> async Task<span class="op">&lt;</span>ActionResult<span class="op">&lt;</span>PrimateSpecies<span class="op">&gt;</span> <span class="fu">GetSpeciesById</span><span class="op">(</span><span class="dt">long</span> id<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>    <span class="dt">var</span> species <span class="op">=</span> await _context<span class="op">.</span><span class="fu">PrimateSpeciesCollection</span><span class="op">.</span><span class="fu">FindAsync</span><span class="op">(</span>id<span class="op">);</span></span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="op">(</span>species <span class="op">==</span> <span class="kw">null</span><span class="op">)</span> <span class="op">{</span> <span class="kw">return</span> <span class="fu">NotFound</span><span class="op">();</span> <span class="op">}</span></span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> species<span class="op">;</span></span>
+<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a>  <span class="op">[</span>HttpPost<span class="op">]</span></span>
+<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> async Task<span class="op">&lt;</span>ActionResult<span class="op">&lt;</span>PrimateSpecies<span class="op">&gt;&gt;</span> <span class="fu">PostPrimate</span><span class="op">(</span>PrimateSpecies species<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb37-27"><a href="#cb37-27" aria-hidden="true" tabindex="-1"></a>    _context<span class="op">.</span><span class="fu">PrimateSpeciesCollection</span><span class="op">.</span><span class="fu">Add</span><span class="op">(</span>species<span class="op">);</span></span>
+<span id="cb37-28"><a href="#cb37-28" aria-hidden="true" tabindex="-1"></a>    await _context<span class="op">.</span><span class="fu">SaveChangesAsync</span><span class="op">();</span></span>
+<span id="cb37-29"><a href="#cb37-29" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> <span class="fu">CreatedAtAction</span><span class="op">(</span><span class="st">&quot;GetSpeciesById&quot;</span><span class="op">,</span> <span class="kw">new</span> <span class="op">{</span> id <span class="op">=</span> species<span class="op">.</span><span class="fu">Id</span><span class="op">},</span> species<span class="op">);</span></span>
+<span id="cb37-30"><a href="#cb37-30" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb37-31"><a href="#cb37-31" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb37-32"><a href="#cb37-32" aria-hidden="true" tabindex="-1"></a>  <span class="op">[</span><span class="fu">HttpDelete</span><span class="op">(</span><span class="st">&quot;{id}&quot;</span><span class="op">)]</span></span>
+<span id="cb37-33"><a href="#cb37-33" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> async Task<span class="op">&lt;</span>ActionResult<span class="op">&lt;</span>PrimateSpecies<span class="op">&gt;&gt;</span> <span class="fu">DeletePrimateSpecies</span><span class="op">(</span><span class="dt">long</span> id<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb37-34"><a href="#cb37-34" aria-hidden="true" tabindex="-1"></a>    <span class="dt">var</span> species <span class="op">=</span> await _context<span class="op">.</span><span class="fu">PrimateSpeciesCollection</span><span class="op">.</span><span class="fu">FindAsync</span><span class="op">(</span>id<span class="op">);</span></span>
+<span id="cb37-35"><a href="#cb37-35" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="op">(</span>species <span class="op">==</span> <span class="kw">null</span><span class="op">)</span> <span class="op">{</span> <span class="kw">return</span> <span class="fu">NotFound</span><span class="op">();</span> <span class="op">}</span></span>
+<span id="cb37-36"><a href="#cb37-36" aria-hidden="true" tabindex="-1"></a>    _context<span class="op">.</span><span class="fu">SapienSpeciesCollection</span><span class="op">.</span><span class="fu">Remove</span><span class="op">(</span>species<span class="op">);</span></span>
+<span id="cb37-37"><a href="#cb37-37" aria-hidden="true" tabindex="-1"></a>    await _context<span class="op">.</span><span class="fu">SaveChangesAsync</span><span class="op">();</span></span>
+<span id="cb37-38"><a href="#cb37-38" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> species<span class="op">;</span></span>
+<span id="cb37-39"><a href="#cb37-39" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb37-40"><a href="#cb37-40" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Modes/DbContext.cs</p>
+<div class="sourceCode" id="cb38"><pre
+class="sourceCode csharp"><code class="sourceCode cs"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> PrimateSpeciesContext<span class="op">:</span> DbContext <span class="op">{</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="fu">PrimateSpeciesContext</span><span class="op">(</span>DbContextOptions<span class="op">&lt;</span>PrimateSpeciesContext<span class="op">&gt;</span> options<span class="op">)</span> <span class="op">:</span> <span class="kw">base</span><span class="op">(</span>options<span class="op">)</span> <span class="op">{</span> <span class="op">}</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> DbSet<span class="op">&lt;</span>PrimateSpecies<span class="op">&gt;</span> SapienSpeciesCollection <span class="op">{</span> <span class="kw">get</span><span class="op">;</span> <span class="kw">set</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Models/PrimateSpecies.cs</p>
+<div class="sourceCode" id="cb39"><pre
+class="sourceCode csharp"><code class="sourceCode cs"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>nanespace vbWebAPI<span class="op">.</span><span class="fu">Models</span> <span class="op">{</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="kw">class</span> PrimateSpecies <span class="op">{</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="dt">long</span> Id <span class="op">{</span> <span class="kw">get</span><span class="op">;</span> <span class="kw">set</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">[</span>Required<span class="op">]</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="dt">string</span> Name <span class="op">{</span><span class="kw">get</span><span class="op">;</span> <span class="kw">set</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">[</span><span class="fu">DefaultValue</span><span class="op">(</span><span class="kw">false</span><span class="op">)]</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="dt">bool</span> IsComplete <span class="op">{</span> <span class="kw">get</span><span class="op">;</span> <span class="kw">set</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 id="openapi-specification">8.2 OpenAPI specification</h3>
+<ul>
+<li>Format to describe a REST-webservice
+<ul>
+<li>Info: licence, contact, …</li>
+<li>Servers: Which URL’s are available</li>
+<li>Security: Which security mechanisms are implemented</li>
+<li>Pahts: The different endpoints (+ Methods)</li>
+<li>Tags: to group paths</li>
+<li>ExternlDocs: reference to docs</li>
+</ul></li>
+<li>In JSON or YAML</li>
+</ul>
+<figure>
+<img src="./img/OpenAPI.png" alt="OpenAPI 3.0" />
+<figcaption aria-hidden="true">OpenAPI 3.0</figcaption>
+</figure>
+<h4 id="swagger">Swagger</h4>
+<p>JSON is easy to automatically generate JSON using <a
+href="https://swagger.io/">swagger.io</a>.</p>
+<blockquote>
+<p>💡: Swagger can also interpret commets in code like
+<code>javadocs</code></p>
+</blockquote>
             </div>
     </div>
   </div>
