@@ -715,9 +715,112 @@ ws.close()
 ```
 
 Before websockets, clients used `polling` to achieve the same functionality.
-Websockets, however, have less latency and overhead which makes the way more efficient.
+Websockets, however, have less latency  and less overhead which makes the way more efficient.
 
 ![Websocket vs Polling](./img/ws-vs-polling.png)
+
+---
+
+## 5. Reactive REST webservices
+
+**Reactive programming**
+: programming paradigm focused on building asynchronous and event-driven applications. At its core, reactive programming revolves around the idea of handling data flows and sequences of events with a focus on reacting to changes.
+
+### 5.1  Data streams
+
+Streams allow for requested data to be send as it comes. Parts of the data can already be send while other parts have not been loaded into memory yet. This is done by creating a  **pipeline** that subscribes to any incoming data, processes the data, and then publishes it.
+
+Traditional methods required the application to store requests in memory. If the size of the required data is larger than the available memory, an "out of memory" error will occur.
+
+![Traditional vs stream](./img/reactive-data-streams.png)
+
+### 5.2 Observer and observables
+
+Central to reactive programming are observables (or streams) that emit/push values or events and observers (or subscribers) that react to these emissions. Observers can subscribe to observables to receive and handle emitted values asynchronously.
+
+**Backpressure**
+: When a data provider pushes more data to a client than it can handle. This problem is solved by making the client pull available data, so it can decide on how fast it receives data.
+
+![Solution to backpressure](./img/backpressure-solution.png)
+
+### 5.3 Reactor Java
+
+![Reactive streams in Java](./img/reactive-stream-java.png)
+
+To efficiently program reactive applications, the [reactor](https://projectreactor.io/) library is often used.
+
+#### Reactor - Flux
+
+A `Flux` is used to emit multiple values (asynchronously) over time.
+
+#### Reactor - Mono
+
+A `Mono` is a kind of flux that can send only one element or none at all.
+
+#### Reactive stack vs Servlet stack
+
+| Reactive Stack | Servlet Stack |
+|----------------|---------------|
+| Spring security reactive | Spring Security |
+| Spring WebFlux | Spring MVC |
+| Spring reactive repos: Mongo, Redis, ...| Spring data repos: JDBC, JPA, NoSQL |
+
+
+#### Example
+
+Reactive DAO
+
+```java
+@Service
+public class SampleDAO{
+final Random random = new Random();
+  String[] ids = {"S1", "S2", "S3"};
+}
+
+public Flux<Sample> getSamples() {
+  return Flux.interval(Duration.ofSeconds(1)).take(10)
+    .map(pulse -> getSample());
+}
+
+private Sample getSample() {
+  Sample s = new Sample();
+  s.setId(ids[random.nextInt(ids.length)]);
+  s.setTime(LocalDateTime.now());
+  s.setValue(4882.42);
+  return s;
+}
+```
+
+Reactive controller
+
+```java
+@RestController
+@RequestMapping("samples")
+public class SampleController {
+  private SampleDAO dao;
+
+  public SampleController(SampleDAO dao) { this.dao = dao; }
+
+  @GetMapping("sample")
+  public Flux<Sample> getSamples() { return dao.getSamples(); }
+}
+```
+
+Reactive client
+
+```java
+public class ClientTestWebflux {
+  public void testServer() {
+    WebClient client = WebClient.create("http://localhost:8080");
+    Flux<Sample> sampleFlux = client.get()
+      .uri("/samples")
+      .retrieve()
+      .bodyToFlux(Sample.class);
+    sampleFlux.subscribe(System.out::println);
+    System.out.println("in test webflux");
+  }
+}
+```
 
 ---
 
