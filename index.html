@@ -173,6 +173,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <li><a href="#routing" id="toc-routing">3.2 Routing</a></li>
         <li><a href="#the-node.js-system"
         id="toc-the-node.js-system">3.3 The Node.js system</a></li>
+        <li><a href="#express.js" id="toc-express.js">3.4
+        Express.js</a></li>
         </ul></li>
         </ul></li>
         </ul>
@@ -838,6 +840,69 @@ callbacks</li>
 block the event loop, instead, use callbacks and asynchronous
 methods.</p>
 </blockquote>
+<h3 id="express.js">3.4 Express.js</h3>
+<p>Express is a framework for Node.js that makes it easier to build
+RESTful APIs. A significant part of Express revolves around
+<strong>middleware</strong>.</p>
+<dl>
+<dt><strong>Middleware</strong></dt>
+<dd>
+software component that sits between a client and a server, intercepting
+and processing HTTP requests and responses. It’s a common pattern in web
+development used to perform various tasks like authentication, logging,
+request parsing, error handling, and more.
+</dd>
+</dl>
+<figure>
+<img src="./img/express-framework.png"
+alt="Structure of Express application" />
+<figcaption aria-hidden="true">Structure of Express
+application</figcaption>
+</figure>
+<h4 id="demo">Demo</h4>
+<p>app.js</p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode js"><code class="sourceCode javascript"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> express <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;express&#39;</span>) <span class="co">// Module</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> path <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;path&#39;</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> logger <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;morgan&#39;</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> bodyParser <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;body-parser&#39;</span>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> routes <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;./routes/index&#39;</span>)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> users <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;./routes/users&#39;</span>)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> app <span class="op">=</span> <span class="fu">express</span>()</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co">//Views</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="fu">set</span>(<span class="st">&#39;views&#39;</span><span class="op">,</span> path<span class="op">.</span><span class="fu">join</span>(<span class="bu">__dirname</span><span class="op">,</span> <span class="st">&#39;views&#39;</span>))</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="fu">set</span>(<span class="st">&#39;view engine&#39;</span><span class="op">,</span> <span class="st">&#39;pug&#39;</span>)</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="co">// Middleware</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="fu">use</span>(<span class="fu">logger</span>(<span class="st">&#39;dev&#39;</span>))</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="fu">use</span>(bodyParser<span class="op">.</span><span class="fu">json</span>())</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="fu">use</span>(bodyParser<span class="op">.</span><span class="fu">urlencoded</span>({ <span class="dt">extended</span><span class="op">:</span> <span class="kw">false</span> }))</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a><span class="co">// Routes</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="fu">use</span>(<span class="st">&#39;/&#39;</span><span class="op">,</span> routes)<span class="op">;</span></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="fu">use</span>(<span class="st">&#39;/users&#39;</span><span class="op">,</span> users)<span class="op">;</span></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a><span class="co">// error handler</span></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="fu">use</span>( (err<span class="op">,</span> req<span class="op">,</span> res<span class="op">,</span> next) <span class="kw">=&gt;</span> {</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>  res<span class="op">.</span><span class="at">locals</span><span class="op">.</span><span class="at">message</span> <span class="op">=</span> err<span class="op">.</span><span class="at">message</span><span class="op">;</span></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>  res<span class="op">.</span><span class="at">locals</span><span class="op">.</span><span class="at">error</span> <span class="op">=</span></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>  req<span class="op">.</span><span class="at">app</span><span class="op">.</span><span class="fu">get</span>(<span class="st">&#39;env&#39;</span>) <span class="op">===</span> <span class="st">&#39;development&#39;</span> <span class="op">?</span> err <span class="op">:</span> {}<span class="op">;</span></span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>  res<span class="op">.</span><span class="fu">status</span>(err<span class="op">.</span><span class="at">status</span> <span class="op">||</span> <span class="dv">500</span>)<span class="op">;</span></span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>  res<span class="op">.</span><span class="fu">render</span>(<span class="st">&#39;error&#39;</span>)<span class="op">;</span></span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>module<span class="op">.</span><span class="at">exports</span> <span class="op">=</span> app<span class="op">;</span></span></code></pre></div>
+<p>routes/index.js</p>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>let express <span class="op">=</span> <span class="fu">require</span><span class="op">(</span><span class="er">&#39;</span>express<span class="er">&#39;</span><span class="op">);</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>let router <span class="op">=</span> express<span class="op">.</span><span class="fu">Router</span><span class="op">();</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>router<span class="op">.</span><span class="fu">get</span><span class="op">(</span><span class="ch">&#39;/&#39;</span><span class="op">,</span> <span class="op">(</span>req<span class="op">,</span> res<span class="op">,</span> next<span class="op">)</span> <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  res<span class="op">.</span><span class="fu">render</span><span class="op">(</span><span class="er">&#39;</span>index<span class="er">&#39;</span><span class="op">,</span> <span class="op">{</span> title<span class="op">:</span> <span class="er">&#39;</span>Express<span class="er">&#39;</span> <span class="op">});</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="op">});</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>module<span class="op">.</span><span class="fu">exports</span> <span class="op">=</span> router<span class="op">;</span></span></code></pre></div>
+<hr />
             </div>
     </div>
   </div>

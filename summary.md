@@ -629,3 +629,67 @@ exports.start = start;
 
 > ⚠️: Because of Node.js concurrency model, it's important to never block the event loop, instead, use callbacks and asynchronous methods.
 
+
+### 3.4 Express.js
+
+Express is a framework for Node.js that makes it easier to build RESTful APIs.
+A significant part of Express revolves around **middleware**.
+
+**Middleware**
+: software component that sits between a client and a server, intercepting and processing HTTP requests and responses. It's a common pattern in web development used to perform various tasks like authentication, logging, request parsing, error handling, and more.
+
+![Structure of Express application](./img/express-framework.png)
+
+#### Demo
+
+app.js
+
+```js
+let express = require('express') // Module
+let path = require('path')
+let logger = require('morgan')
+let bodyParser = require('body-parser')
+
+let routes = require('./routes/index')
+let users = require('./routes/users')
+
+let app = express()
+//Views
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'pug')
+// Middleware
+app.use(logger('dev'))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+// Routes
+app.use('/', routes);
+app.use('/users', users);
+
+// error handler
+app.use( (err, req, res, next) => {
+  res.locals.message = err.message;
+  res.locals.error =
+  req.app.get('env') === 'development' ? err : {};
+  res.status(err.status || 500);
+  res.render('error');
+});
+
+module.exports = app;
+```
+
+routes/index.js
+
+```java
+let express = require('express');
+let router = express.Router();
+
+router.get('/', (req, res, next) => {
+  res.render('index', { title: 'Express' });
+});
+
+module.exports = router;
+```
+
+---
+
+
