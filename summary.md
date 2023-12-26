@@ -947,7 +947,7 @@ ResultSet resultSet = preparedStatement.executeQuery();
 - Available through dependency injection or JNDI
 - Safer than driver: No configuration in code.
 
-### 6.5 ORM v JDBC
+### 6.5 ORM vs JDBC
 
 - JDBC/ADO.NET:
   - Time-intensive
@@ -959,4 +959,149 @@ ResultSet resultSet = preparedStatement.executeQuery();
 
 ---
 
+## 7. ADO.NET
 
+To get access from .NET-application to datasource (database, xml, ..).
+
+- Loose coupling between application and datasource: Perform data manipulations on a part of the data without immediately applying these changes to the datasource.
+- Easy to convert to XML
+
+### 7.1 ADO.NET Architecture
+
+![ADO.NET architecture](./img/ado-architecture.png)
+
+### 7.2 DataSet
+
+A `DataSet` is a collection of data tables that contain the data. It is used to fetch data without interacting with a Data Source. It is an in-memory data store that can hold more than one table at the same time.
+
+#### Creating a DataSet
+
+```csharp
+// Creating a DataSet
+DataSet ds = new DataSet();
+DataSet customerDS = new DataSet("CustomerOrders");
+
+// Creating a Table
+DataTable orders = customerDS.Tables.Add("Orders");
+
+// Creating column
+DataColumn orderId = orders.Comumns.Add("OrderID", typeof(Int32));
+
+// Key constraint
+orders.PrimaryKey = new DataColumn[] {orderId};
+
+// Adding data to rows
+DataRow rowOrders = orders.NewRow();
+rowOrders[bestelID] = 3;
+rowOrders["Quantity"] = 9;
+orders.Rows.Add(rowOrders);
+```
+
+### 7.3 DataProvider
+
+![Data Provides](./img/ado-DataProviders.png)
+
+#### Key objects
+
+- `Connection`: Connect to DB
+- `Command`: Perform a command
+- `DataReader`: Obtain data
+- `DataAdapter`: Connect DataSet with DB
+
+### 7.4 Data Manipulation
+
+OrdersDAOReader.cs
+
+```csharp
+// Configuration
+String task = ConfigurtionManager.AppSettings["SELECT_ORDER"];
+ConnectionStringSettings connStringSet = ConfigurationManager.ConnectionString["orders"];
+
+// Factory for provider
+DbProviderFactory factory = DbProviderFactory.GetFactory(connStringSet.ProviderName);
+
+// Connection object
+DbConnection conn = factory.CreateConnection();
+DbCommand command = conn.CreateCommand();
+
+command.CommandText = Configuration.AppSettings["SELECT_ORDERS"]
+
+// Run command-objects
+using (DbConnection conn = ...) {
+  conn.Open()
+  // delete-, insert-, update queries
+  int rowsChanged = command.ExecuteNonQuery();
+  // select queries
+  DbDataReader reader = command.ExecuteReader();
+  while (reader.Read()) {
+    DataRow row = tableOrder.NewRow();
+    row[0] = reader["orderID"];
+    row[1] = reader[1];
+    row[2] = reader.GetString(2);
+    tabelOrder.Rows.Add(row);
+  }
+}
+```
+
+App.config
+
+```xml
+<configuration>
+  <connectionStrings>
+    <add name="orders" providerName="System.Data.SqlClient" 
+      connectionString="Data Source=(LocalDB)\MSSQLLocalDB"/>
+  </connectionStrings>
+  <appSettings>
+    <add key="SELECT_ORDER" value="select * from Orders"/>
+  </appSettings>
+</configuration> 
+```
+
+### 7.5 DataAdapter
+
+The adapter can add data to the `DataTable`, and write those changes to the DB. Before, the changes in `DataTable` where not definitive.
+
+`DataAdapter` has 4 Command-objects:
+
+- `SelectCommand`: Retrieves data from the database based on specified criteria, usually in the form of a SELECT query
+- `InsertCommand`: Inserts new data into the database. It typically includes an INSERT query
+- `UpdateCommand`: Modifies existing data in the database. (Write changes made to `DataSource` to DB)
+- `DeleteCommand`: Removes data from the database
+
+OrderDAOAddapter.cs
+
+```csharp
+DbDataAdapter adapter = factory.CreateDataAdapter();
+DbCommand command = ...;
+adapter.SelectCommand = ...;
+DataSet customerDS = new DataSet(DS_ORDERS);
+adapter.Fill(customerDS, TABLE_ORDERS);
+```
+
+### 7.6 Transactions
+
+1. Start transaction
+2. Assigning a Transaction-obj to a Commmand-obj
+3. Running the queries
+4. Commit - Rollback
+
+```csharp
+using (DbConnection conn = ...) {
+  conn.Open();
+  
+  // Basic transaction
+  using (DbTransaction trans = conn.BeginTransaction())
+  {
+    try
+    {
+      // Perform database operations within the transaction
+
+      // Commit the transaction
+      trans.Commit();
+    } catch (Exception) {
+      // Rollback the transaction if an exception occurs
+      trans.Rollback();
+    }
+  }
+}
+```

@@ -200,8 +200,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         SQL-injection</a></li>
         <li><a href="#driver-vs-datasource"
         id="toc-driver-vs-datasource">6.4 Driver vs DataSource</a></li>
-        <li><a href="#orm-v-jdbc" id="toc-orm-v-jdbc">6.5 ORM v
+        <li><a href="#orm-vs-jdbc" id="toc-orm-vs-jdbc">6.5 ORM vs
         JDBC</a></li>
+        </ul></li>
+        <li><a href="#ado.net" id="toc-ado.net">7. ADO.NET</a>
+        <ul>
+        <li><a href="#ado.net-architecture"
+        id="toc-ado.net-architecture">7.1 ADO.NET Architecture</a></li>
+        <li><a href="#dataset" id="toc-dataset">7.2 DataSet</a></li>
+        <li><a href="#dataprovider" id="toc-dataprovider">7.3
+        DataProvider</a></li>
+        <li><a href="#data-manipulation" id="toc-data-manipulation">7.4
+        Data Manipulation</a></li>
+        <li><a href="#dataadapter" id="toc-dataadapter">7.5
+        DataAdapter</a></li>
+        <li><a href="#transactions" id="toc-transactions">7.6
+        Transactions</a></li>
         </ul></li>
         </ul></li>
         </ul>
@@ -1207,7 +1221,7 @@ class="sourceCode java"><code class="sourceCode java"><span id="cb31-1"><a href=
 <li>Available through dependency injection or JNDI</li>
 <li>Safer than driver: No configuration in code.</li>
 </ul>
-<h3 id="orm-v-jdbc">6.5 ORM v JDBC</h3>
+<h3 id="orm-vs-jdbc">6.5 ORM vs JDBC</h3>
 <ul>
 <li>JDBC/ADO.NET:
 <ul>
@@ -1222,6 +1236,146 @@ class="sourceCode java"><code class="sourceCode java"><span id="cb31-1"><a href=
 </ul></li>
 </ul>
 <hr />
+<h2 id="ado.net">7. ADO.NET</h2>
+<p>To get access from .NET-application to datasource (database, xml,
+..).</p>
+<ul>
+<li>Loose coupling between application and datasource: Perform data
+manipulations on a part of the data without immediately applying these
+changes to the datasource.</li>
+<li>Easy to convert to XML</li>
+</ul>
+<h3 id="ado.net-architecture">7.1 ADO.NET Architecture</h3>
+<figure>
+<img src="./img/ado-architecture.png" alt="ADO.NET architecture" />
+<figcaption aria-hidden="true">ADO.NET architecture</figcaption>
+</figure>
+<h3 id="dataset">7.2 DataSet</h3>
+<p>A <code>DataSet</code> is a collection of data tables that contain
+the data. It is used to fetch data without interacting with a Data
+Source. It is an in-memory data store that can hold more than one table
+at the same time.</p>
+<h4 id="creating-a-dataset">Creating a DataSet</h4>
+<div class="sourceCode" id="cb32"><pre
+class="sourceCode csharp"><code class="sourceCode cs"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Creating a DataSet</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>DataSet ds <span class="op">=</span> <span class="kw">new</span> <span class="fu">DataSet</span><span class="op">();</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>DataSet customerDS <span class="op">=</span> <span class="kw">new</span> <span class="fu">DataSet</span><span class="op">(</span><span class="st">&quot;CustomerOrders&quot;</span><span class="op">);</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Creating a Table</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>DataTable orders <span class="op">=</span> customerDS<span class="op">.</span><span class="fu">Tables</span><span class="op">.</span><span class="fu">Add</span><span class="op">(</span><span class="st">&quot;Orders&quot;</span><span class="op">);</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Creating column</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>DataColumn orderId <span class="op">=</span> orders<span class="op">.</span><span class="fu">Comumns</span><span class="op">.</span><span class="fu">Add</span><span class="op">(</span><span class="st">&quot;OrderID&quot;</span><span class="op">,</span> <span class="kw">typeof</span><span class="op">(</span>Int32<span class="op">));</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="co">// Key constraint</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>orders<span class="op">.</span><span class="fu">PrimaryKey</span> <span class="op">=</span> <span class="kw">new</span> DataColumn<span class="op">[]</span> <span class="op">{</span>orderId<span class="op">};</span></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a><span class="co">// Adding data to rows</span></span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>DataRow rowOrders <span class="op">=</span> orders<span class="op">.</span><span class="fu">NewRow</span><span class="op">();</span></span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>rowOrders<span class="op">[</span>bestelID<span class="op">]</span> <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>rowOrders<span class="op">[</span><span class="st">&quot;Quantity&quot;</span><span class="op">]</span> <span class="op">=</span> <span class="dv">9</span><span class="op">;</span></span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>orders<span class="op">.</span><span class="fu">Rows</span><span class="op">.</span><span class="fu">Add</span><span class="op">(</span>rowOrders<span class="op">);</span></span></code></pre></div>
+<h3 id="dataprovider">7.3 DataProvider</h3>
+<figure>
+<img src="./img/ado-DataProviders.png" alt="Data Provides" />
+<figcaption aria-hidden="true">Data Provides</figcaption>
+</figure>
+<h4 id="key-objects">Key objects</h4>
+<ul>
+<li><code>Connection</code>: Connect to DB</li>
+<li><code>Command</code>: Perform a command</li>
+<li><code>DataReader</code>: Obtain data</li>
+<li><code>DataAdapter</code>: Connect DataSet with DB</li>
+</ul>
+<h3 id="data-manipulation">7.4 Data Manipulation</h3>
+<p>OrdersDAOReader.cs</p>
+<div class="sourceCode" id="cb33"><pre
+class="sourceCode csharp"><code class="sourceCode cs"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Configuration</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>String task <span class="op">=</span> ConfigurtionManager<span class="op">.</span><span class="fu">AppSettings</span><span class="op">[</span><span class="st">&quot;SELECT_ORDER&quot;</span><span class="op">];</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>ConnectionStringSettings connStringSet <span class="op">=</span> ConfigurationManager<span class="op">.</span><span class="fu">ConnectionString</span><span class="op">[</span><span class="st">&quot;orders&quot;</span><span class="op">];</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Factory for provider</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>DbProviderFactory factory <span class="op">=</span> DbProviderFactory<span class="op">.</span><span class="fu">GetFactory</span><span class="op">(</span>connStringSet<span class="op">.</span><span class="fu">ProviderName</span><span class="op">);</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Connection object</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>DbConnection conn <span class="op">=</span> factory<span class="op">.</span><span class="fu">CreateConnection</span><span class="op">();</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>DbCommand command <span class="op">=</span> conn<span class="op">.</span><span class="fu">CreateCommand</span><span class="op">();</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>command<span class="op">.</span><span class="fu">CommandText</span> <span class="op">=</span> Configuration<span class="op">.</span><span class="fu">AppSettings</span><span class="op">[</span><span class="st">&quot;SELECT_ORDERS&quot;</span><span class="op">]</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a><span class="co">// Run command-objects</span></span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="op">(</span>DbConnection conn <span class="op">=</span> <span class="op">...)</span> <span class="op">{</span></span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>  conn<span class="op">.</span><span class="fu">Open</span><span class="op">()</span></span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>  <span class="co">// delete-, insert-, update queries</span></span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> rowsChanged <span class="op">=</span> command<span class="op">.</span><span class="fu">ExecuteNonQuery</span><span class="op">();</span></span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>  <span class="co">// select queries</span></span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>  DbDataReader reader <span class="op">=</span> command<span class="op">.</span><span class="fu">ExecuteReader</span><span class="op">();</span></span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>  <span class="kw">while</span> <span class="op">(</span>reader<span class="op">.</span><span class="fu">Read</span><span class="op">())</span> <span class="op">{</span></span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>    DataRow row <span class="op">=</span> tableOrder<span class="op">.</span><span class="fu">NewRow</span><span class="op">();</span></span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>    row<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> reader<span class="op">[</span><span class="st">&quot;orderID&quot;</span><span class="op">];</span></span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>    row<span class="op">[</span><span class="dv">1</span><span class="op">]</span> <span class="op">=</span> reader<span class="op">[</span><span class="dv">1</span><span class="op">];</span></span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a>    row<span class="op">[</span><span class="dv">2</span><span class="op">]</span> <span class="op">=</span> reader<span class="op">.</span><span class="fu">GetString</span><span class="op">(</span><span class="dv">2</span><span class="op">);</span></span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>    tabelOrder<span class="op">.</span><span class="fu">Rows</span><span class="op">.</span><span class="fu">Add</span><span class="op">(</span>row<span class="op">);</span></span>
+<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>App.config</p>
+<div class="sourceCode" id="cb34"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">configuration</span>&gt;</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">connectionStrings</span>&gt;</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">add</span><span class="ot"> name=</span><span class="st">&quot;orders&quot;</span><span class="ot"> providerName=</span><span class="st">&quot;System.Data.SqlClient&quot;</span> </span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="ot">      connectionString=</span><span class="st">&quot;Data Source=(LocalDB)\MSSQLLocalDB&quot;</span>/&gt;</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">connectionStrings</span>&gt;</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">appSettings</span>&gt;</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">add</span><span class="ot"> key=</span><span class="st">&quot;SELECT_ORDER&quot;</span><span class="ot"> value=</span><span class="st">&quot;select * from Orders&quot;</span>/&gt;</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">appSettings</span>&gt;</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">configuration</span>&gt; </span></code></pre></div>
+<h3 id="dataadapter">7.5 DataAdapter</h3>
+<p>The adapter can add data to the <code>DataTable</code>, and write
+those changes to the DB. Before, the changes in <code>DataTable</code>
+where not definitive.</p>
+<p><code>DataAdapter</code> has 4 Command-objects:</p>
+<ul>
+<li><code>SelectCommand</code>: Retrieves data from the database based
+on specified criteria, usually in the form of a SELECT query</li>
+<li><code>InsertCommand</code>: Inserts new data into the database. It
+typically includes an INSERT query</li>
+<li><code>UpdateCommand</code>: Modifies existing data in the database.
+(Write changes made to <code>DataSource</code> to DB)</li>
+<li><code>DeleteCommand</code>: Removes data from the database</li>
+</ul>
+<p>OrderDAOAddapter.cs</p>
+<div class="sourceCode" id="cb35"><pre
+class="sourceCode csharp"><code class="sourceCode cs"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>DbDataAdapter adapter <span class="op">=</span> factory<span class="op">.</span><span class="fu">CreateDataAdapter</span><span class="op">();</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>DbCommand command <span class="op">=</span> <span class="op">...;</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>adapter<span class="op">.</span><span class="fu">SelectCommand</span> <span class="op">=</span> <span class="op">...;</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>DataSet customerDS <span class="op">=</span> <span class="kw">new</span> <span class="fu">DataSet</span><span class="op">(</span>DS_ORDERS<span class="op">);</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>adapter<span class="op">.</span><span class="fu">Fill</span><span class="op">(</span>customerDS<span class="op">,</span> TABLE_ORDERS<span class="op">);</span></span></code></pre></div>
+<h3 id="transactions">7.6 Transactions</h3>
+<ol type="1">
+<li>Start transaction</li>
+<li>Assigning a Transaction-obj to a Commmand-obj</li>
+<li>Running the queries</li>
+<li>Commit - Rollback</li>
+</ol>
+<div class="sourceCode" id="cb36"><pre
+class="sourceCode csharp"><code class="sourceCode cs"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="op">(</span>DbConnection conn <span class="op">=</span> <span class="op">...)</span> <span class="op">{</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  conn<span class="op">.</span><span class="fu">Open</span><span class="op">();</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Basic transaction</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">using</span> <span class="op">(</span>DbTransaction trans <span class="op">=</span> conn<span class="op">.</span><span class="fu">BeginTransaction</span><span class="op">())</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">{</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">try</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>      <span class="co">// Perform database operations within the transaction</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>      <span class="co">// Commit the transaction</span></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>      trans<span class="op">.</span><span class="fu">Commit</span><span class="op">();</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="kw">catch</span> <span class="op">(</span>Exception<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>      <span class="co">// Rollback the transaction if an exception occurs</span></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>      trans<span class="op">.</span><span class="fu">Rollback</span><span class="op">();</span></span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
             </div>
     </div>
   </div>
