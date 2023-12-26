@@ -507,3 +507,125 @@ For detailed examples of relations (with annotation parameters) see: <https://ww
 
 ---
 
+## 3. Node.js
+
+Node.js is a JS runtime environment that runs on the V8 JavaScript engine.
+
+### 3.1 Example HTTP-server in Node.js
+
+```js
+let http = require('http');
+let fs = require('fs');
+let port = process.env.port || 8080;
+
+http.createServer( (req, res) => {
+  console.log("Request on port 8080");
+  res.writeHead(200, {
+    'Content-Type': 'text/html',
+    'Access-Control-Allow-Origin': '*'
+  });
+  let read = fs.createReadStream(__dirname + '/index.html');
+  read.pipe(res);
+}).listen(port);
+```
+
+### 3.2 Routing
+
+![Routing in Node.js](./img/routing-nodejs.png)
+
+server.js
+
+```js
+let server = require('./start');
+let router = require('./router');
+let requestHandlers = require("./handlers");
+let handler = {};
+
+handler["/"] = requestHandlers.home;
+handler["/show"] = requestHandlers.show;
+handler["/upload"] = requestHandlers.upload;
+
+server.start(router.route, handler);
+```
+
+handlers.js
+
+```js
+let fs = require('fs');
+
+function home(res) {
+  respond(res,'views/home.html');
+  return true;
+}
+
+function show(response) {...}
+function upload(response) {...}
+function respond(response, file) {
+  fs.readFile(file, (err, data) => {
+    response.writeHead(200, {"Content-Type": "text/html"});
+    response.write(data);
+    response.end();
+  });
+}
+exports.home = home;
+exports.show = show;
+exports.upload = upload;
+```
+
+router.js
+
+```js
+function route(pathname, handler, response) {
+  console.log("Request for " + pathname);
+  if (handler[pathname] !== undefined) {
+    return handler[pathname](response);
+  } else {
+    console.log("No Method found for " + pathname);
+    return null;
+  }
+}
+exports.route = route;
+```
+
+start.js
+
+```js
+let http = require("http");
+let url = require("url");
+
+function start(route, handler) {
+  console.log("Starting.");
+  start.js
+
+  function onRequest(request, response) {
+    let pathname = url.parse(request.url).pathname;
+    let content = route(pathname, handler, response);
+    if (!content) {
+      response.writeHead(404, {"Content-Type": "text/plain"});
+      response.write("404 Not found");
+      response.end();
+    }
+  }
+
+  let port = process.env.port || 8080;
+  http.createServer(onRequest).listen(port);
+  console.log("Has been started.");
+}
+
+exports.start = start;
+```
+
+### 3.3 The Node.js system
+
+![The Node.js system](./img/nodejs-system.jpg)
+
+- **Engine**: executes the code
+- **Event Loop**: Everything that happens in Node is a reaction to an event. Only one thread executes code, the thread where the event loop is running.
+  1. **Timers**: Executes callbacks scheduled by `setTimeout()` or `setInterval()`
+  2. **I/O Callbacks**: Handle I/O-related callbacks
+  3. **Poll**: Retrieve new I/O events
+  4. **Check**: Execute `setImmediate()` callbacks
+  5. **Close Callbacks**: Executes close event callbacks (`socket.on('close',...)`)
+
+> ⚠️: Because of Node.js concurrency model, it's important to never block the event loop, instead, use callbacks and asynchronous methods.
+
