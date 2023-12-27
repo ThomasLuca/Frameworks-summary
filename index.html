@@ -236,6 +236,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         Localization</a></li>
         <li><a href="#security" id="toc-security">Security</a></li>
         </ul></li>
+        <li><a href="#security-1" id="toc-security-1">10. Security</a>
+        <ul>
+        <li><a href="#authentication-2" id="toc-authentication-2">10.1
+        Authentication</a></li>
+        <li><a href="#most-common-vulnerabilities"
+        id="toc-most-common-vulnerabilities">10.2 Most common
+        vulnerabilities</a></li>
+        </ul></li>
         </ul></li>
         </ul>
 
@@ -593,15 +601,11 @@ class="sourceCode java"><code class="sourceCode java"><span id="cb12-1"><a href=
 <span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="bu">String</span> <span class="fu">getName</span><span class="op">()</span> <span class="op">{</span> <span class="cf">return</span> name<span class="op">;</span> <span class="op">}</span></span>
 <span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">setName</span><span class="op">(</span><span class="bu">String</span> name<span class="op">)</span> <span class="op">{</span> <span class="kw">this</span><span class="op">.</span><span class="fu">name</span> <span class="op">=</span> name<span class="op">;</span> <span class="op">}</span></span>
 <span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>There are a couple different strategies to assign a new Primary
-Key:</p>
-<ul>
-<li>AUTO: Automatically choose strategy</li>
-<li>IDENTITY: Relies on an auto-incremented column in the database</li>
-<li>SEQUENCE: Utilizes a database sequence to generate primary key</li>
-<li>TABLE: Requires an extra table to keep track of the next available
-id</li>
-</ul>
+<p>There are a couple different strategies to assign a new Primary Key:
+- AUTO: Automatically choose strategy - IDENTITY: Relies on an
+auto-incremented column in the database - SEQUENCE: Utilizes a database
+sequence to generate primary key - TABLE: Requires an extra table to
+keep track of the next available id</p>
 <h3 id="jpa-in-spring">2.2 JPA in Spring</h3>
 <figure>
 <img src="./img/jpa-config.png" alt="JPA configuration" />
@@ -639,17 +643,12 @@ class="sourceCode java"><code class="sourceCode java"><span id="cb14-1"><a href=
 <span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    repo<span class="op">.</span><span class="fu">save</span><span class="op">(</span>addProduct<span class="op">);</span></span>
 <span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
 <span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>List of build-in methods:</p>
-<ul>
-<li><code>save</code>: save new object</li>
-<li><code>findAll</code>: return all entities</li>
-<li><code>findAllById</code>: return all with certain id</li>
-<li><code>flush</code>: write changes to DB</li>
-<li><code>saveAll</code>: Save list of objects</li>
-<li><code>delete</code>, <code>deleteAll</code>: remove
-entity/entities</li>
-<li><code>existById</code>: does entity exist?</li>
-</ul>
+<p>List of build-in methods: - <code>save</code>: save new object -
+<code>findAll</code>: return all entities - <code>findAllById</code>:
+return all with certain id - <code>flush</code>: write changes to DB -
+<code>saveAll</code>: Save list of objects - <code>delete</code>,
+<code>deleteAll</code>: remove entity/entities - <code>existById</code>:
+does entity exist?</p>
 <blockquote>
 <p>⚠️: Using a JPA requires some configuration in
 <code>application.properties</code></p>
@@ -659,13 +658,15 @@ spring.datasource.username=TLuca
 spring.datasource.password=&lt;redacted&gt;</code></pre>
 <h3 id="orm-inheritance">2.3 ORM Inheritance</h3>
 <p>There are different annotation to indicate what type of inheritance
-an object is subject to.</p>
+an object is subject to:</p>
 <ul>
 <li><code>@Inheritance(strategy = ...)</code>: Sets how entities are
 stored in the DB (default = <code>SINGLE_TABLE</code>)</li>
 <li><code>@DiscriminatorColumn(name = "...", discriminatorType= ...)</code>:
-Defines a column that distinguishes entity types in a single table
-inheritance strategy.</li>
+Defines a column that distinguishes entity types in a single table</li>
+</ul>
+<p>Inheritance strategy:</p>
+<ul>
 <li><code>@DiscriminatorValue("K")</code>: Assigns a specific value to
 differentiate an entity type in a single table inheritance setup</li>
 <li><code>@PrimaryKeyJoinColumn(name = "...")</code>: Maps a parent
@@ -731,43 +732,37 @@ class="sourceCode java"><code class="sourceCode java"><span id="cb16-1"><a href=
 <h3 id="orm-associations-relations">2.5 ORM associations: relations</h3>
 <p>Different mappings of associations of entities:</p>
 <ol type="1">
-<li>One-to-One Relationship:</li>
-</ol>
+<li>One-to-One Relationship:
 <ul>
 <li><code>@OneToOne</code>: Defines a one-to-one relationship between
 two entities.</li>
 <li><code>@JoinColumn</code>: Specifies the column used for joining two
 entities in a one-to-one relationship.</li>
-</ul>
-<ol start="2" type="1">
-<li>One-to-Many Relationship:</li>
-</ol>
+</ul></li>
+<li>One-to-Many Relationship:
 <ul>
 <li><code>@OneToMany</code>: Represents a one-to-many relationship
 between two entities.</li>
 <li><code>@JoinColumn</code> (within <code>@OneToMany</code>): Specifies
 the column in the “many” side entity to join with the “one” side
 entity.</li>
-</ul>
-<ol start="3" type="1">
-<li>Many-to-One Relationship:</li>
-</ol>
+</ul></li>
+<li>Many-to-One Relationship:
 <ul>
 <li><code>@ManyToOne</code>: Specifies a many-to-one relationship
 between two entities.</li>
 <li><code>@JoinColumn</code> (within <code>@ManyToOne</code>): Specifies
 the column in the “many” side entity that references the “one” side
 entity.</li>
-</ul>
-<ol start="4" type="1">
-<li>Many-to-Many Relationship:</li>
-</ol>
+</ul></li>
+<li>Many-to-Many Relationship:
 <ul>
 <li><code>@ManyToMany</code>: Defines a many-to-many relationship
 between two entities.</li>
 <li><code>@JoinTable</code>: Specifies the join table for the
 many-to-many relationship, defining the columns and their mappings.</li>
-</ul>
+</ul></li>
+</ol>
 <p>For detailed examples of relations (with annotation parameters) see:
 <a href="https://www.baeldung.com/jpa-hibernate-associations"
 class="uri">https://www.baeldung.com/jpa-hibernate-associations</a></p>
@@ -1559,15 +1554,13 @@ class="sourceCode csharp"><code class="sourceCode cs"><span id="cb42-1"><a href=
 <li>Provides Views</li>
 <li>Handle errors during action</li>
 <li><code>IActionResult</code> return the View that matches the method
-name, but can also:</li>
-</ol>
+name, but can also:
 <ul>
 <li>Render a partial view (view within another view)</li>
 <li>Redirect to other method</li>
 <li>Return JavaScript to execute</li>
 <li>…</li>
-</ul>
-<ol start="4" type="1">
+</ul></li>
 <li>Can also pass data to View</li>
 <li>Can handle request from client (using HTTP-methods +
 parameters)</li>
@@ -1660,6 +1653,168 @@ class="sourceCode csharp"><code class="sourceCode cs"><span id="cb46-1"><a href=
 <span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> ActionResult <span class="fu">AdminPanel</span><span class="op">()</span> <span class="op">{}</span></span>
 <span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <hr />
+<h2 id="security-1">10. Security</h2>
+<h3 id="authentication-2">10.1 Authentication</h3>
+<ul>
+<li>“Recognizing” users</li>
+<li>Provide login for users</li>
+</ul>
+<h4 id="cookie-based-auth---sessions">Cookie-based auth -&gt;
+Sessions</h4>
+<ol type="1">
+<li>Client logs in</li>
+<li>Browser sends login details to server</li>
+<li>Server adds cookie with session-id in header</li>
+<li>Client includes cookie in header with every request it makes</li>
+<li>Sever saves info about client (session-object)</li>
+</ol>
+<figure>
+<img src="./img/auth-cookie.png" alt="Cookies: session auth" />
+<figcaption aria-hidden="true">Cookies: session auth</figcaption>
+</figure>
+<ul>
+<li>✅: Login only once</li>
+<li>✅: Validity of cookie can get disabled</li>
+<li>❌: Only valid for one domain</li>
+<li>❌: Vulnerable for XSS- and XSRF attacks</li>
+<li>❌: Not <em>stateless</em>: temporary save user info on server</li>
+</ul>
+<h4 id="token-based-auth">Token-based auth</h4>
+<ol type="1">
+<li>Client logs in</li>
+<li>Browser sends login details to server</li>
+<li>Server makes token</li>
+<li>Token gets saved in browser memory</li>
+<li>Client provides token in every request in Auth-header</li>
+<li>Server decodes token and verifies credentials</li>
+</ol>
+<figure>
+<img src="./img/auth-token.png" alt="Token-based Auth" />
+<figcaption aria-hidden="true">Token-based Auth</figcaption>
+</figure>
+<ul>
+<li>✅: Stateless -&gt; Token contains all info to get verified, no copy
+on server needed</li>
+<li>✅: Valid on multiple domains</li>
+<li>✅: No userinfo in token</li>
+<li>✅: Not vulnerable for XSRF attacks</li>
+<li>❌: Validity of token can not be revoked</li>
+<li>❌: Vulnerable for XSS attacks</li>
+</ul>
+<h4 id="oauth2">OAuth2</h4>
+<dl>
+<dt><strong>OAuth2</strong></dt>
+<dd>
+authorization framework that enables third-party applications to access
+certain resources on behalf of a user, without necessarily sharing the
+user’s credentials. It’s commonly used for delegated access, allowing
+applications to act on behalf of users to access their data on different
+services.
+</dd>
+</dl>
+<p><strong>Parties:</strong></p>
+<ol type="1">
+<li><strong>Resource Owner</strong>: End user, owner of the data</li>
+<li><strong>Client</strong>: Application that wants to access user’s
+data (eg: Spotify)</li>
+<li><strong>Authorization Server</strong>: Manages authorization and
+authentication, issues access tokens (eg: Facebook Auth server)</li>
+<li><strong>Resource Server</strong>: Holds protected resources that
+client wants to access (eg: facebook.com)</li>
+</ol>
+<p><strong>Flow</strong>:</p>
+<ol type="1">
+<li><strong>Authorization Request</strong>:
+<ul>
+<li>The client requests authorization from the resource owner to access
+its resources.</li>
+<li>This request is redirected to the authorization server.</li>
+</ul></li>
+<li><strong>User Authorization</strong>: Resource owner grants concent
+to log in to auth server</li>
+<li><strong>Authorization Grant</strong>: Auth server sends back
+authorization grant and auth code back to client.</li>
+<li><strong>Access Token Request</strong>: Client request <em>access
+token</em> form auth server by presenting it with its auth grant and
+auth code.</li>
+<li><strong>Access Token Grant</strong>: If the authorization server
+verifies the client and authorization grant, it issues an access token
+to the client.</li>
+<li><strong>Accessing Protected resources</strong>:
+<ul>
+<li>Client requests rousources from resource server (eg: profile picture
+and friends)</li>
+<li>Client includes token in header</li>
+</ul></li>
+</ol>
+<figure>
+<img src="./img/OAuth2-grand-flow.png" alt="OAuth2 Grand flow" />
+<figcaption aria-hidden="true">OAuth2 Grand flow</figcaption>
+</figure>
+<p><strong>Types of Grants</strong>:</p>
+<ul>
+<li>Authorization Code: when client is a webserver</li>
+<li>Implicit: when client is a js-app in browser</li>
+<li>Resource owner password credential: when client and auth server are
+from same authority</li>
+<li>Client credentials: when client is the resource owner</li>
+</ul>
+<p><strong>OAuth vulnerabilities</strong>:</p>
+<ul>
+<li>❌: Access token is available in js in browser</li>
+<li>❌: Attacker can make ordinary service (client) that requires OAuth
+signup -&gt; uses obtained token to get access to other resource servers
+that use same OAuth service</li>
+<li>✅: Solution -&gt; auth server provides additional information about
+token (check if proper client = <strong>Proof Key for Code
+Exchange</strong>)</li>
+</ul>
+<h4 id="single-sign-on-sso">Single Sign On (SSO)</h4>
+<ul>
+<li>Login once for different webapps</li>
+<li>Single point of failure</li>
+<li>Can be implemented with OAuth or SAML</li>
+</ul>
+<h4 id="two-factor-authentication-2fa">Two Factor Authentication
+(2FA)</h4>
+<p>Authentication involves multiple steps. Possible over multiple
+devices.</p>
+<h3 id="most-common-vulnerabilities">10.2 Most common
+vulnerabilities</h3>
+<h4 id="injection">1. Injection</h4>
+<p>The injection of SQL into ordinary input fields/parameters (XSS)</p>
+<h4 id="id-and-authentication-failures">2. Id and Authentication
+failures</h4>
+<p>Bad implementation of authentication and sessionmanagement. Attacker
+gets access to passwords, keys or sessiontokens.</p>
+<h4 id="cryptographic-failures">3. Cryptographic Failures</h4>
+<p>Sensitive data not suffitiently protected because of bad or old
+cryptography implementation.</p>
+<blockquote>
+<p>💡: Use existing, well respected frameworks to implement
+cryptography.</p>
+</blockquote>
+<h4 id="insecure-design">4. Insecure design</h4>
+<p>Bad design, not tested agains common vulnerabilities.</p>
+<h4 id="broken-access-control">5. Broken Access Control</h4>
+<p>Users have to many access rights (attacker gets right to other
+accounts, files, databases, …)</p>
+<h4 id="security-misconfiguration">6. Security Misconfiguration</h4>
+<ul>
+<li>Outdated software</li>
+<li>Unsafe default configuration (default passwords)</li>
+</ul>
+<h4 id="server-side-request-forgery-ssrf">7. Server-Side request forgery
+(SSRF)</h4>
+<p>Using an insecure server to gain access to intern data (eg: urls as
+parameter in response).</p>
+<h4 id="software-and-data-integrity-failures">8. Software and Data
+Integrity Failures</h4>
+<p>Using libraries of untrusted sources, or having an unsafe CI/CD
+pipeline.</p>
+<h4 id="vulnerable-and-outdated-components">9. Vulnerable and outdated
+components</h4>
+<p>Newer version often contain patches for 0-days.</p>
             </div>
     </div>
   </div>

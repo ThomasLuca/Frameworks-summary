@@ -33,14 +33,13 @@ REST stands for Representational State Transfer. It's an architectural style use
 
 - **Client-server**
 - **Stateless**: server doesn't store any client context
-- **Uniform interface**: independent of type of client 
+- **Uniform interface**: independent of type of client
 - **Cacheable**: responses from REST service can specify to cache for a specified period. (using the `Cache-Control` header field)
 - **Layered system**: client doesn't now which layer it is connected to
 - **Code on demand**: Content of message can also be code
 - Resource-based: can be any data or service that the app exposes, resources is identifiable via a URI
 - CRUD operations: Must support GET, POST, PUT, DELETE methods.
 - Representational resources: could be represented by multiple representations (JSON, XML, ...)
-
 
 #### URI (Uniform Resource Identifier)
 
@@ -81,7 +80,6 @@ It is also possible to add parameters to the URI to filter or sort on a resource
 **Why springboot?**
 
 Spring avoids a lot of manual configuration and is easy to manage dependently.
-
 
 #### Spring architecture
 
@@ -130,7 +128,7 @@ public class AgendaController {
 
 ##### Dependency injection
 
-DI is needed to make the Agenda class (dependency) available to the to `RestController`. 
+DI is needed to make the Agenda class (dependency) available to the to `RestController`.
 
 ```java
 @Component
@@ -138,7 +136,6 @@ public class Agenda {...}
 ```
 
 ##### Method response status
-
 
 A REST-method typically returns a `ResponseEntity` (along with a message).
 
@@ -319,9 +316,9 @@ It allows devs to define how objects/classes map to database tables and vice ver
 #### Object-relational impedance mismatch
 
 There are a lot of concepts in OOP that resembles the structure of Relational databases:
-- Identities
-- Relations
-- Inheritance
+    - Identities
+    - Relations
+    - Inheritance
 
 There are a couple requirements to be able to map an object to a DB.
 
@@ -352,11 +349,10 @@ public class Sportclub {
 ```
 
 There are a couple different strategies to assign a new Primary Key:
-
-* AUTO: Automatically choose strategy
-* IDENTITY: Relies on an auto-incremented column in the database
-* SEQUENCE: Utilizes a database sequence to generate primary key
-* TABLE: Requires an extra table to keep track of the next available id
+    - AUTO: Automatically choose strategy
+    - IDENTITY: Relies on an auto-incremented column in the database
+    - SEQUENCE: Utilizes a database sequence to generate primary key
+    - TABLE: Requires an extra table to keep track of the next available id
 
 ### 2.2 JPA in Spring
 
@@ -364,7 +360,7 @@ There are a couple different strategies to assign a new Primary Key:
 
 #### JPA Repository
 
-The ` JpaRepository` is an interface that is a CRUD-repository with extra functionalities for performing database operations.
+The `JpaRepository` is an interface that is a CRUD-repository with extra functionalities for performing database operations.
 
 ```java
 // Typically defined in a single file (like ProductRepository.java)
@@ -400,15 +396,13 @@ public class ProductDao{
 ```
 
 List of build-in methods:
-
-- `save`: save new object
-- `findAll`: return all entities
-- `findAllById`: return all with certain id
-- `flush`: write changes to DB
-- `saveAll`: Save list of objects
-- `delete`, `deleteAll`: remove entity/entities
-- `existById`: does entity exist?
-
+    - `save`: save new object
+    - `findAll`: return all entities
+    - `findAllById`: return all with certain id
+    - `flush`: write changes to DB
+    - `saveAll`: Save list of objects
+    - `delete`, `deleteAll`: remove entity/entities
+    - `existById`: does entity exist?
 
 > ⚠️: Using a JPA requires some configuration in `application.properties`
 
@@ -420,13 +414,15 @@ spring.datasource.password=<redacted>
 
 ### 2.3 ORM Inheritance
 
-There are different annotation to indicate what type of inheritance an object is subject to.
+There are different annotation to indicate what type of inheritance an object is subject to:
 
 - `@Inheritance(strategy = ...)`: Sets how entities are stored in the DB (default = `SINGLE_TABLE`)
-- `@DiscriminatorColumn(name = "...", discriminatorType= ...)`: Defines a column that distinguishes entity types in a single table inheritance strategy.
+- `@DiscriminatorColumn(name = "...", discriminatorType= ...)`: Defines a column that distinguishes entity types in a single table
+
+Inheritance strategy:
+
 - `@DiscriminatorValue("K")`: Assigns a specific value to differentiate an entity type in a single table inheritance setup
 - `@PrimaryKeyJoinColumn(name = "...")`: Maps a parent table's primary key as a foreign key in the child table in joined table inheritance.
-
 
 ### 2.4 ORM associations: value-objects
 
@@ -485,17 +481,17 @@ public class sportclub {
 Different mappings of associations of entities:
 
 1. One-to-One Relationship:
-  - `@OneToOne`: Defines a one-to-one relationship between two entities.
-  - `@JoinColumn`: Specifies the column used for joining two entities in a one-to-one relationship.
+    - `@OneToOne`: Defines a one-to-one relationship between two entities.
+    - `@JoinColumn`: Specifies the column used for joining two entities in a one-to-one relationship.
 2. One-to-Many Relationship:
-  - `@OneToMany`: Represents a one-to-many relationship between two entities.
-  - `@JoinColumn` (within `@OneToMany`): Specifies the column in the "many" side entity to join with the "one" side entity.
+    - `@OneToMany`: Represents a one-to-many relationship between two entities.
+    - `@JoinColumn` (within `@OneToMany`): Specifies the column in the "many" side entity to join with the "one" side entity.
 3. Many-to-One Relationship:
-  - `@ManyToOne`: Specifies a many-to-one relationship between two entities.
-  - `@JoinColumn` (within `@ManyToOne`): Specifies the column in the "many" side entity that references the "one" side entity.
+    - `@ManyToOne`: Specifies a many-to-one relationship between two entities.
+    - `@JoinColumn` (within `@ManyToOne`): Specifies the column in the "many" side entity that references the "one" side entity.
 4. Many-to-Many Relationship:
-  - `@ManyToMany`: Defines a many-to-many relationship between two entities.
-  - `@JoinTable`: Specifies the join table for the many-to-many relationship, defining the columns and their mappings.
+    - `@ManyToMany`: Defines a many-to-many relationship between two entities.
+    - `@JoinTable`: Specifies the join table for the many-to-many relationship, defining the columns and their mappings.
 
 For detailed examples of relations (with annotation parameters) see: <https://www.baeldung.com/jpa-hibernate-associations>
 
@@ -628,7 +624,6 @@ exports.start = start;
   5. **Close Callbacks**: Executes close event callbacks (`socket.on('close',...)`)
 
 > ⚠️: Because of Node.js concurrency model, it's important to never block the event loop, instead, use callbacks and asynchronous methods.
-
 
 ### 3.4 Express.js
 
@@ -765,7 +760,6 @@ A `Mono` is a kind of flux that can send only one element or none at all.
 | Spring WebFlux | Spring MVC |
 | Spring reactive repos: Mongo, Redis, ...| Spring data repos: JDBC, JPA, NoSQL |
 
-
 #### Example
 
 Reactive DAO
@@ -841,7 +835,7 @@ public class ClientTestWebflux {
 ### 6.2 JDBC Example
 
 #### Configuration
- 
+
 db_constants.properties
 
 ```text
@@ -1207,17 +1201,15 @@ JSON is easy to automatically generate JSON using [swagger.io](https://swagger.i
 
 > 💡: Swagger can also interpret comments in code like `javadocs`
 
-
 ---
 
 ## 9. ASP.NET Core MVC
 
 ### Model-View-Controller-pattern (MVC)
- 
 
 ![ASP.NET MVC](./img/ASP-MVC2.png)
 
-MVC's aim to separate concerns within an application by dividing it into three interconnected components: 
+MVC's aim to separate concerns within an application by dividing it into three interconnected components:
 
 1. **Model**: data and business logic
 2. **View**: Presentation layer (UI)
@@ -1277,10 +1269,10 @@ public class Product
 1. Provides Views
 2. Handle errors during action
 3. `IActionResult` return the View that matches the method name, but can also:
-  - Render a partial view (view within another view)
-  - Redirect to other method
-  - Return JavaScript to execute
-  - ...
+    - Render a partial view (view within another view)
+    - Redirect to other method
+    - Return JavaScript to execute
+    - ...
 4. Can also pass data to View
 5. Can handle request from client (using HTTP-methods + parameters)
 
@@ -1337,7 +1329,6 @@ app.MapControllerRoute(name: "default",
 **Localization**
 : Change application to a specific language or culture
 
-
 1. Make content changeable
 2. Provide content per language / culture (XML files with different language, decision on which language to use can be done with middleware)
 3. Select language / culture
@@ -1371,4 +1362,138 @@ public class AccountController : Controller {
 ```
 
 ---
+
+## 10. Security
+
+### 10.1 Authentication
+
+- "Recognizing" users
+- Provide login for users
+
+#### Cookie-based auth -> Sessions
+
+1. Client logs in
+2. Browser sends login details to server
+3. Server adds cookie with session-id in header
+4. Client includes cookie in header with every request it makes
+5. Sever saves info about client (session-object)
+
+![Cookies: session auth](./img/auth-cookie.png)
+
+- ✅: Login only once
+- ✅: Validity of cookie can get disabled
+- ❌: Only valid for one domain
+- ❌: Vulnerable for XSS- and XSRF attacks
+- ❌: Not *stateless*: temporary save user info on server
+
+#### Token-based auth
+
+1. Client logs in
+2. Browser sends login details to server
+3. Server makes token
+4. Token gets saved in browser memory
+5. Client provides token in every request in Auth-header
+6. Server decodes token and verifies credentials
+
+![Token-based Auth](./img/auth-token.png)
+
+- ✅: Stateless -> Token contains all info to get verified, no copy on server needed
+- ✅: Valid on multiple domains
+- ✅: No userinfo in token
+- ✅: Not vulnerable for XSRF attacks
+- ❌: Validity of token can not be revoked
+- ❌: Vulnerable for XSS attacks
+
+#### OAuth2
+
+**OAuth2**
+: authorization framework that enables third-party applications to access certain resources on behalf of a user, without necessarily sharing the user's credentials. It's commonly used for delegated access, allowing applications to act on behalf of users to access their data on different services.
+
+**Parties:**
+
+1. **Resource Owner**: End user, owner of the data
+2. **Client**: Application that wants to access user's data (eg: Spotify)
+3. **Authorization Server**: Manages authorization and authentication, issues access tokens (eg: Facebook Auth server)
+4. **Resource Server**: Holds protected resources that client wants to access (eg: facebook.com)
+
+**Flow**:
+
+1. **Authorization Request**:
+    - The client requests authorization from the resource owner to access its resources.
+    - This request is redirected to the authorization server.
+2. **User Authorization**: Resource owner grants concent to log in to auth server
+3. **Authorization Grant**: Auth server sends back authorization grant and auth code back to client.
+4. **Access Token Request**: Client request *access token* form auth server by presenting it with its auth grant and auth code.
+5. **Access Token Grant**: If the authorization server verifies the client and authorization grant, it issues an access token to the client.
+6. **Accessing Protected resources**:
+    - Client requests rousources from resource server (eg: profile picture and friends)
+    - Client includes token in header
+
+![OAuth2 Grand flow](./img/OAuth2-grand-flow.png)
+
+**Types of Grants**:
+
+- Authorization Code: when client is a webserver
+- Implicit: when client is a js-app in browser
+- Resource owner password credential: when client and auth server are from same authority
+- Client credentials: when client is the resource owner
+
+**OAuth vulnerabilities**:
+
+- ❌: Access token is available in js in browser
+- ❌: Attacker can make ordinary service (client) that requires OAuth signup -> uses obtained token to get access to other resource servers that use same OAuth service
+- ✅: Solution -> auth server provides additional information about token (check if proper client = **Proof Key for Code Exchange**)
+
+#### Single Sign On (SSO)
+
+- Login once for different webapps
+- Single point of failure
+- Can be implemented with OAuth or SAML
+
+#### Two Factor Authentication (2FA)
+
+Authentication involves multiple steps. Possible over multiple devices.
+
+### 10.2 Most common vulnerabilities
+
+#### 1. Injection
+
+The injection of SQL into ordinary input fields/parameters (XSS)
+
+#### 2. Id and Authentication failures
+
+Bad implementation of authentication and sessionmanagement. Attacker gets access to passwords, keys or sessiontokens.
+
+#### 3. Cryptographic Failures
+
+Sensitive data not suffitiently protected because of bad or old cryptography implementation.
+
+> 💡: Use existing, well respected frameworks to implement cryptography.
+
+#### 4. Insecure design
+
+Bad design, not tested agains common vulnerabilities.
+
+#### 5. Broken Access Control
+
+Users have to many access rights (attacker gets right to other accounts, files, databases, ...)
+
+#### 6. Security Misconfiguration
+
+- Outdated software
+- Unsafe default configuration (default passwords)
+
+#### 7. Server-Side request forgery (SSRF)
+
+Using an insecure server to gain access to intern data (eg: urls as parameter in response).
+
+#### 8. Software and Data Integrity Failures
+
+Using libraries of untrusted sources, or having an unsafe CI/CD pipeline.
+
+#### 9. Vulnerable and outdated components
+
+Newer version often contain patches for 0-days.
+
+
 
