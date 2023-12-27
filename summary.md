@@ -1205,5 +1205,170 @@ nanespace vbWebAPI.Models {
 
 JSON is easy to automatically generate JSON using [swagger.io](https://swagger.io/).
 
-> 💡: Swagger can also interpret commets in code like `javadocs`
+> 💡: Swagger can also interpret comments in code like `javadocs`
+
+
+---
+
+## 9. ASP.NET Core MVC
+
+### Model-View-Controller-pattern (MVC)
+ 
+
+![ASP.NET MVC](./img/ASP-MVC2.png)
+
+MVC's aim to separate concerns within an application by dividing it into three interconnected components: 
+
+1. **Model**: data and business logic
+2. **View**: Presentation layer (UI)
+3. **Controller**: intermediary between the Model and the View. It handles user input and translates it into actions performed by the Model or View
+
+![MVC pattern](./img/mvc-pattern.png)
+
+Structure:
+
+```text
+Application
+  ┣━ /Controllers/
+  ┃   ┗ ProductController.cs
+  ┣━ /Models/
+  ┃   ┗ ProductModel.cs
+  ┣━ /Views/
+  ┃   ┗ /Product/
+  ┃       ┣ Index.cshtml
+  ┃       ┗ Details.cshtml
+  ┗━ Program.cs
+```
+
+#### Model
+
+```csharp
+// Product model class representing the data structure
+public class Product
+{
+    public int Id { get; set; }
+
+    [Display(Name = "Name")]
+    [Required(ErrorMessage = "Name can not be empty.")]
+    public string Name { get; set; }
+    public decimal Price { get; set; }
+}
+```
+
+#### View
+
+- `View()`: Opens view with name matching the method
+- `View("String")`: Opens view `string.cshtml`
+- `View(Object)`: proved Object to view called `<methodname>.cshtml`
+- `View("string", Object)`: provide Object to view called `string.cshtml`
+
+```csharp
+@model List<Product>
+<ul>
+    @foreach (var product in Model)
+    {
+        <li>@product.Name - $@product.Price</li>
+    }
+</ul>
+```
+
+#### Controller
+
+1. Provides Views
+2. Handle errors during action
+3. `IActionResult` return the View that matches the method name, but can also:
+  - Render a partial view (view within another view)
+  - Redirect to other method
+  - Return JavaScript to execute
+  - ...
+4. Can also pass data to View
+5. Can handle request from client (using HTTP-methods + parameters)
+
+```csharp
+public class ProductController : Controller
+{
+    public IActionResult Index()
+    {
+        // Simulated data retrieval
+        var products = new List<Product>
+        {
+            new Product { Id = 1, Name = "Product A", Price = 19.99M },
+            new Product { Id = 2, Name = "Product B", Price = 29.99M },
+            new Product { Id = 3, Name = "Product C", Price = 39.99M }
+        };
+
+        return View(products); // Pass the list of products to the view
+    }
+
+    // /Product/Detail/{id}
+    public IActionResult Details(int id)
+    {
+        return View(id);
+    }
+
+    // /Product/Details?id={id}
+    public IActionResult Details() {
+        return View(Convert.ToInt32(Request["id"]));
+    }
+}
+```
+
+#### Routing
+
+Program.cs:
+
+```csharp
+app.MapControllerRoute(name: "blog",
+  pattern: "blog/{*article}",
+  defaults: new { controller = "Blog", action = "Article" });
+app.MapControllerRoute(name: "default",
+  pattern: "{controller=Home}/{action=Index}/{id?}");
+```
+
+> ⚠️: It's also important that the app is protected against XSRF/CSRF (Cross-site request forgery): attacker exploits a user's authenticated session to execute malicious actions. To prevent this, tokens or verification techniques are used to confirm the authenticity of requests, ensuring they originate from the expected user.
+
+![XSRF](./img/XSRF.png)
+
+### Globalization and Localization
+
+**Globalization**
+: Application should support multiple languages and cultures (eg: display Arabic characters)
+
+**Localization**
+: Change application to a specific language or culture
+
+
+1. Make content changeable
+2. Provide content per language / culture (XML files with different language, decision on which language to use can be done with middleware)
+3. Select language / culture
+
+### Security
+
+#### Authentication
+
+```csharp
+// Only add storage if user had valid identity
+builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+  options.SignIn.RequireConfirmedAccount = true)
+  .AddEntityFrameworkStores<ApplicationDbContext>();
+
+...
+app.UseAuthentication();
+app.UseAuthorization();
+```
+
+#### Authorization
+
+```csharp
+public class AccountController : Controller {
+  [AllowAnonymous] // Allow anyone
+  public ActionResult Login(){ }
+  [Authorize] // Allow only to authorized users
+  public ActionResult Logout(){ }
+  [Authorize(Roles = "Administrator")]
+  public ActionResult AdminPanel() {}
+}
+```
+
+---
 

@@ -225,6 +225,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         id="toc-openapi-specification">8.2 OpenAPI
         specification</a></li>
         </ul></li>
+        <li><a href="#asp.net-core-mvc" id="toc-asp.net-core-mvc">9.
+        ASP.NET Core MVC</a>
+        <ul>
+        <li><a href="#model-view-controller-pattern-mvc"
+        id="toc-model-view-controller-pattern-mvc">Model-View-Controller-pattern
+        (MVC)</a></li>
+        <li><a href="#globalization-and-localization"
+        id="toc-globalization-and-localization">Globalization and
+        Localization</a></li>
+        <li><a href="#security" id="toc-security">Security</a></li>
+        </ul></li>
         </ul></li>
         </ul>
 
@@ -1478,9 +1489,177 @@ class="sourceCode csharp"><code class="sourceCode cs"><span id="cb39-1"><a href=
 <p>JSON is easy to automatically generate JSON using <a
 href="https://swagger.io/">swagger.io</a>.</p>
 <blockquote>
-<p>💡: Swagger can also interpret commets in code like
+<p>💡: Swagger can also interpret comments in code like
 <code>javadocs</code></p>
 </blockquote>
+<hr />
+<h2 id="asp.net-core-mvc">9. ASP.NET Core MVC</h2>
+<h3 id="model-view-controller-pattern-mvc">Model-View-Controller-pattern
+(MVC)</h3>
+<figure>
+<img src="./img/ASP-MVC2.png" alt="ASP.NET MVC" />
+<figcaption aria-hidden="true">ASP.NET MVC</figcaption>
+</figure>
+<p>MVC’s aim to separate concerns within an application by dividing it
+into three interconnected components:</p>
+<ol type="1">
+<li><strong>Model</strong>: data and business logic</li>
+<li><strong>View</strong>: Presentation layer (UI)</li>
+<li><strong>Controller</strong>: intermediary between the Model and the
+View. It handles user input and translates it into actions performed by
+the Model or View</li>
+</ol>
+<figure>
+<img src="./img/mvc-pattern.png" alt="MVC pattern" />
+<figcaption aria-hidden="true">MVC pattern</figcaption>
+</figure>
+<p>Structure:</p>
+<pre class="text"><code>Application
+  ┣━ /Controllers/
+  ┃   ┗ ProductController.cs
+  ┣━ /Models/
+  ┃   ┗ ProductModel.cs
+  ┣━ /Views/
+  ┃   ┗ /Product/
+  ┃       ┣ Index.cshtml
+  ┃       ┗ Details.cshtml
+  ┗━ Program.cs</code></pre>
+<h4 id="model">Model</h4>
+<div class="sourceCode" id="cb41"><pre
+class="sourceCode csharp"><code class="sourceCode cs"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Product model class representing the data structure</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> Product</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="dt">int</span> Id <span class="op">{</span> <span class="kw">get</span><span class="op">;</span> <span class="kw">set</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">[</span><span class="fu">Display</span><span class="op">(</span>Name <span class="op">=</span> <span class="st">&quot;Name&quot;</span><span class="op">)]</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">[</span><span class="fu">Required</span><span class="op">(</span>ErrorMessage <span class="op">=</span> <span class="st">&quot;Name can not be empty.&quot;</span><span class="op">)]</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="dt">string</span> Name <span class="op">{</span> <span class="kw">get</span><span class="op">;</span> <span class="kw">set</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="dt">decimal</span> Price <span class="op">{</span> <span class="kw">get</span><span class="op">;</span> <span class="kw">set</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h4 id="view">View</h4>
+<ul>
+<li><code>View()</code>: Opens view with name matching the method</li>
+<li><code>View("String")</code>: Opens view
+<code>string.cshtml</code></li>
+<li><code>View(Object)</code>: proved Object to view called
+<code>&lt;methodname&gt;.cshtml</code></li>
+<li><code>View("string", Object)</code>: provide Object to view called
+<code>string.cshtml</code></li>
+</ul>
+<div class="sourceCode" id="cb42"><pre
+class="sourceCode csharp"><code class="sourceCode cs"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>@model List<span class="op">&lt;</span>Product<span class="op">&gt;</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>ul<span class="op">&gt;</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>    @<span class="fu">foreach</span> <span class="op">(</span><span class="dt">var</span> product <span class="kw">in</span> Model<span class="op">)</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;</span>li<span class="op">&gt;</span>@product<span class="op">.</span><span class="fu">Name</span> <span class="op">-</span> $@product<span class="op">.</span><span class="fu">Price</span><span class="op">&lt;/</span>li<span class="op">&gt;</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;/</span>ul<span class="op">&gt;</span></span></code></pre></div>
+<h4 id="controller">Controller</h4>
+<ol type="1">
+<li>Provides Views</li>
+<li>Handle errors during action</li>
+<li><code>IActionResult</code> return the View that matches the method
+name, but can also:</li>
+</ol>
+<ul>
+<li>Render a partial view (view within another view)</li>
+<li>Redirect to other method</li>
+<li>Return JavaScript to execute</li>
+<li>…</li>
+</ul>
+<ol start="4" type="1">
+<li>Can also pass data to View</li>
+<li>Can handle request from client (using HTTP-methods +
+parameters)</li>
+</ol>
+<div class="sourceCode" id="cb43"><pre
+class="sourceCode csharp"><code class="sourceCode cs"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> ProductController <span class="op">:</span> Controller</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> IActionResult <span class="fu">Index</span><span class="op">()</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Simulated data retrieval</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">var</span> products <span class="op">=</span> <span class="kw">new</span> List<span class="op">&lt;</span>Product<span class="op">&gt;</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">{</span></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>            <span class="kw">new</span> Product <span class="op">{</span> Id <span class="op">=</span> <span class="dv">1</span><span class="op">,</span> Name <span class="op">=</span> <span class="st">&quot;Product A&quot;</span><span class="op">,</span> Price <span class="op">=</span> <span class="fl">19.99M</span> <span class="op">},</span></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>            <span class="kw">new</span> Product <span class="op">{</span> Id <span class="op">=</span> <span class="dv">2</span><span class="op">,</span> Name <span class="op">=</span> <span class="st">&quot;Product B&quot;</span><span class="op">,</span> Price <span class="op">=</span> <span class="fl">29.99M</span> <span class="op">},</span></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>            <span class="kw">new</span> Product <span class="op">{</span> Id <span class="op">=</span> <span class="dv">3</span><span class="op">,</span> Name <span class="op">=</span> <span class="st">&quot;Product C&quot;</span><span class="op">,</span> Price <span class="op">=</span> <span class="fl">39.99M</span> <span class="op">}</span></span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>        <span class="op">};</span></span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span> <span class="fu">View</span><span class="op">(</span>products<span class="op">);</span> <span class="co">// Pass the list of products to the view</span></span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">// /Product/Detail/{id}</span></span>
+<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> IActionResult <span class="fu">Details</span><span class="op">(</span><span class="dt">int</span> id<span class="op">)</span></span>
+<span id="cb43-18"><a href="#cb43-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb43-19"><a href="#cb43-19" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span> <span class="fu">View</span><span class="op">(</span>id<span class="op">);</span></span>
+<span id="cb43-20"><a href="#cb43-20" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb43-21"><a href="#cb43-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-22"><a href="#cb43-22" aria-hidden="true" tabindex="-1"></a>    <span class="co">// /Product/Details?id={id}</span></span>
+<span id="cb43-23"><a href="#cb43-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> IActionResult <span class="fu">Details</span><span class="op">()</span> <span class="op">{</span></span>
+<span id="cb43-24"><a href="#cb43-24" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span> <span class="fu">View</span><span class="op">(</span>Convert<span class="op">.</span><span class="fu">ToInt32</span><span class="op">(</span>Request<span class="op">[</span><span class="st">&quot;id&quot;</span><span class="op">]));</span></span>
+<span id="cb43-25"><a href="#cb43-25" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb43-26"><a href="#cb43-26" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h4 id="routing-1">Routing</h4>
+<p>Program.cs:</p>
+<div class="sourceCode" id="cb44"><pre
+class="sourceCode csharp"><code class="sourceCode cs"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="fu">MapControllerRoute</span><span class="op">(</span>name<span class="op">:</span> <span class="st">&quot;blog&quot;</span><span class="op">,</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  pattern<span class="op">:</span> <span class="st">&quot;blog/{*article}&quot;</span><span class="op">,</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  defaults<span class="op">:</span> <span class="kw">new</span> <span class="op">{</span> controller <span class="op">=</span> <span class="st">&quot;Blog&quot;</span><span class="op">,</span> action <span class="op">=</span> <span class="st">&quot;Article&quot;</span> <span class="op">});</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="fu">MapControllerRoute</span><span class="op">(</span>name<span class="op">:</span> <span class="st">&quot;default&quot;</span><span class="op">,</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  pattern<span class="op">:</span> <span class="st">&quot;{controller=Home}/{action=Index}/{id?}&quot;</span><span class="op">);</span></span></code></pre></div>
+<blockquote>
+<p>⚠️: It’s also important that the app is protected against XSRF/CSRF
+(Cross-site request forgery): attacker exploits a user’s authenticated
+session to execute malicious actions. To prevent this, tokens or
+verification techniques are used to confirm the authenticity of
+requests, ensuring they originate from the expected user.</p>
+</blockquote>
+<figure>
+<img src="./img/XSRF.png" alt="XSRF" />
+<figcaption aria-hidden="true">XSRF</figcaption>
+</figure>
+<h3 id="globalization-and-localization">Globalization and
+Localization</h3>
+<dl>
+<dt><strong>Globalization</strong></dt>
+<dd>
+Application should support multiple languages and cultures (eg: display
+Arabic characters)
+</dd>
+<dt><strong>Localization</strong></dt>
+<dd>
+Change application to a specific language or culture
+</dd>
+</dl>
+<ol type="1">
+<li>Make content changeable</li>
+<li>Provide content per language / culture (XML files with different
+language, decision on which language to use can be done with
+middleware)</li>
+<li>Select language / culture</li>
+</ol>
+<h3 id="security">Security</h3>
+<h4 id="authentication-1">Authentication</h4>
+<div class="sourceCode" id="cb45"><pre
+class="sourceCode csharp"><code class="sourceCode cs"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Only add storage if user had valid identity</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>builder<span class="op">.</span><span class="fu">Services</span><span class="op">.</span><span class="fu">AddDefaultIdentity</span><span class="op">&lt;</span>IdentityUser<span class="op">&gt;(</span>options <span class="op">=&gt;</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  options<span class="op">.</span><span class="fu">SignIn</span><span class="op">.</span><span class="fu">RequireConfirmedAccount</span> <span class="op">=</span> <span class="kw">true</span><span class="op">)</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">AddEntityFrameworkStores</span><span class="op">&lt;</span>ApplicationDbContext<span class="op">&gt;();</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a><span class="op">...</span></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="fu">UseAuthentication</span><span class="op">();</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="fu">UseAuthorization</span><span class="op">();</span></span></code></pre></div>
+<h4 id="authorization-1">Authorization</h4>
+<div class="sourceCode" id="cb46"><pre
+class="sourceCode csharp"><code class="sourceCode cs"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> AccountController <span class="op">:</span> Controller <span class="op">{</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">[</span>AllowAnonymous<span class="op">]</span> <span class="co">// Allow anyone</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> ActionResult <span class="fu">Login</span><span class="op">(){</span> <span class="op">}</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">[</span>Authorize<span class="op">]</span> <span class="co">// Allow only to authorized users</span></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> ActionResult <span class="fu">Logout</span><span class="op">(){</span> <span class="op">}</span></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">[</span><span class="fu">Authorize</span><span class="op">(</span>Roles <span class="op">=</span> <span class="st">&quot;Administrator&quot;</span><span class="op">)]</span></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> ActionResult <span class="fu">AdminPanel</span><span class="op">()</span> <span class="op">{}</span></span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<hr />
             </div>
     </div>
   </div>
