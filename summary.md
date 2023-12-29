@@ -114,7 +114,7 @@ public class AgendaController {
 
 - `@RestController`:
   - Normal class
-  - Wrapped in a `serverlet`
+  - Wrapped in a `servlet` ( a class that handles requests, processes them and reply back with a response)
   - REST-service
 - `@RequestMapping`:
   - Specifies which path a REST-service needs to handle.
@@ -340,8 +340,7 @@ public class Sportclub {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)
   public Long getId() { return id; }
-  public void setId(Long id) { this.id = id;
-  }
+  public void setId(Long id) { this.id = id; }
 
   public String getName() { return name; }
   public void setName(String name) { this.name = name; }
@@ -349,10 +348,11 @@ public class Sportclub {
 ```
 
 There are a couple different strategies to assign a new Primary Key:
-    - AUTO: Automatically choose strategy
-    - IDENTITY: Relies on an auto-incremented column in the database
-    - SEQUENCE: Utilizes a database sequence to generate primary key
-    - TABLE: Requires an extra table to keep track of the next available id
+
+- AUTO: Automatically choose strategy
+- IDENTITY: Relies on an auto-incremented column in the database
+- SEQUENCE: Utilizes a database sequence to generate primary key
+- TABLE: Requires an extra table to keep track of the next available id
 
 ### 2.2 JPA in Spring
 
@@ -382,7 +382,7 @@ public class ProductDao{
   }
 
   public List<Product> getProductsByCategory(String category) {
-    return productRepository.findByCategory(category);
+    return repo.findByCategory(category);
   }
 
   public Product getProductById(long id) {
@@ -396,13 +396,14 @@ public class ProductDao{
 ```
 
 List of build-in methods:
-    - `save`: save new object
-    - `findAll`: return all entities
-    - `findAllById`: return all with certain id
-    - `flush`: write changes to DB
-    - `saveAll`: Save list of objects
-    - `delete`, `deleteAll`: remove entity/entities
-    - `existById`: does entity exist?
+
+- `save`: save new object
+- `findAll`: return all entities
+- `findAllById`: return all with certain id
+- `flush`: write changes to DB
+- `saveAll`: Save list of objects
+- `delete`, `deleteAll`: remove entity/entities
+- `existById`: does entity exist?
 
 > ⚠️: Using a JPA requires some configuration in `application.properties`
 
@@ -767,21 +768,22 @@ Reactive DAO
 ```java
 @Service
 public class SampleDAO{
-final Random random = new Random();
-  String[] ids = {"S1", "S2", "S3"};
-}
+  final Random random = new Random();
+    String[] ids = {"S1", "S2", "S3"};
+  }
 
-public Flux<Sample> getSamples() {
-  return Flux.interval(Duration.ofSeconds(1)).take(10)
-    .map(pulse -> getSample());
-}
+  public Flux<Sample> getSamples() {
+    return Flux.interval(Duration.ofSeconds(1)).take(10)
+      .map(pulse -> getSample());
+  }
 
-private Sample getSample() {
-  Sample s = new Sample();
-  s.setId(ids[random.nextInt(ids.length)]);
-  s.setTime(LocalDateTime.now());
-  s.setValue(4882.42);
-  return s;
+  private Sample getSample() {
+    Sample s = new Sample();
+    s.setId(ids[random.nextInt(ids.length)]);
+    s.setTime(LocalDateTime.now());
+    s.setValue(4882.42);
+    return s;
+  }
 }
 ```
 
@@ -883,7 +885,6 @@ public class JDBCDataStorage implements IDataStorage {
   @Value("${Q_select_products}")
   private String selectProducts;
 
-
   private DataSource dataSource;
 
   @Autowired
@@ -955,7 +956,7 @@ ResultSet resultSet = preparedStatement.executeQuery();
 
 ## 7. ADO.NET
 
-To get access from .NET-application to datasource (database, xml, ..).
+To get access from .NET-application to datasource (database, xml, ...).
 
 - Loose coupling between application and datasource: Perform data manipulations on a part of the data without immediately applying these changes to the datasource.
 - Easy to convert to XML
