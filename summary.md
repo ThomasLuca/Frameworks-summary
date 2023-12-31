@@ -55,6 +55,7 @@ It is also possible to add parameters to the URI to filter or sort on a resource
 
 ##### Level 0: The swamp of pox
 
+- Plain Old XML (POX)
 - One endpoint
 - HTTP only as transport
 - Remote procedure invocation (`POST <openSlotRequest`)
