@@ -292,6 +292,16 @@ public class SecurityConfig {
 }
 ```
 
+##### Request vs method authorization
+
+|                    | Request                | Method |
+|------------------- | ---------------------- | --------------- |
+| Type               | Rough                  | Detailed |
+| Place of config    | In config class        | on specific method |
+| Type of config     | With lambda expression | With annotations |
+| Definition of auth | In code                | Spring Expression Language |
+
+
 #### CSRF: Cross Site Request Forgery
 
 CSRF is an attack where an attacker tricks a user's browser into making an unintended and unauthorized request to a different website, exploiting the user's authenticated session.
