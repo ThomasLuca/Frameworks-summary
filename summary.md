@@ -1202,7 +1202,7 @@ nanespace vbWebAPI.Models {
   - Security: Which security mechanisms are implemented
   - Pahts: The different endpoints (+ Methods)
   - Tags: to group paths
-  - ExternlDocs: reference to docs
+  - ExternalDocs: reference to docs
 - In JSON or YAML
 
 ![OpenAPI 3.0](./img/OpenAPI.png)
@@ -1433,12 +1433,12 @@ public class AccountController : Controller {
 1. **Authorization Request**:
     - The client requests authorization from the resource owner to access its resources.
     - This request is redirected to the authorization server.
-2. **User Authorization**: Resource owner grants concent to log in to auth server
+2. **User Authorization**: Resource owner grants consent to log in to auth server
 3. **Authorization Grant**: Auth server sends back authorization grant and auth code back to client.
 4. **Access Token Request**: Client request *access token* form auth server by presenting it with its auth grant and auth code.
 5. **Access Token Grant**: If the authorization server verifies the client and authorization grant, it issues an access token to the client.
 6. **Accessing Protected resources**:
-    - Client requests rousources from resource server (eg: profile picture and friends)
+    - Client requests resources from resource server (eg: profile picture and friends)
     - Client includes token in header
 
 ![OAuth2 Grand flow](./img/OAuth2-grand-flow.png)
@@ -1474,17 +1474,17 @@ The injection of SQL into ordinary input fields/parameters (XSS)
 
 #### 2. Id and Authentication failures
 
-Bad implementation of authentication and sessionmanagement. Attacker gets access to passwords, keys or sessiontokens.
+Bad implementation of authentication and session management. Attacker gets access to passwords, keys or session tokens.
 
 #### 3. Cryptographic Failures
 
-Sensitive data not suffitiently protected because of bad or old cryptography implementation.
+Sensitive data not sufficiently protected because of bad or old cryptography implementation.
 
 > 💡: Use existing, well respected frameworks to implement cryptography.
 
 #### 4. Insecure design
 
-Bad design, not tested agains common vulnerabilities.
+Bad design, not tested against common vulnerabilities.
 
 #### 5. Broken Access Control
 

@@ -1520,7 +1520,7 @@ class="sourceCode csharp"><code class="sourceCode cs"><span id="cb39-1"><a href=
 <li>Security: Which security mechanisms are implemented</li>
 <li>Pahts: The different endpoints (+ Methods)</li>
 <li>Tags: to group paths</li>
-<li>ExternlDocs: reference to docs</li>
+<li>ExternalDocs: reference to docs</li>
 </ul></li>
 <li>In JSON or YAML</li>
 </ul>
@@ -1778,7 +1778,7 @@ client wants to access (eg: facebook.com)</li>
 its resources.</li>
 <li>This request is redirected to the authorization server.</li>
 </ul></li>
-<li><strong>User Authorization</strong>: Resource owner grants concent
+<li><strong>User Authorization</strong>: Resource owner grants consent
 to log in to auth server</li>
 <li><strong>Authorization Grant</strong>: Auth server sends back
 authorization grant and auth code back to client.</li>
@@ -1790,7 +1790,7 @@ verifies the client and authorization grant, it issues an access token
 to the client.</li>
 <li><strong>Accessing Protected resources</strong>:
 <ul>
-<li>Client requests rousources from resource server (eg: profile picture
+<li>Client requests resources from resource server (eg: profile picture
 and friends)</li>
 <li>Client includes token in header</li>
 </ul></li>
@@ -1833,17 +1833,17 @@ vulnerabilities</h3>
 <p>The injection of SQL into ordinary input fields/parameters (XSS)</p>
 <h4 id="id-and-authentication-failures">2. Id and Authentication
 failures</h4>
-<p>Bad implementation of authentication and sessionmanagement. Attacker
-gets access to passwords, keys or sessiontokens.</p>
+<p>Bad implementation of authentication and session management. Attacker
+gets access to passwords, keys or session tokens.</p>
 <h4 id="cryptographic-failures">3. Cryptographic Failures</h4>
-<p>Sensitive data not suffitiently protected because of bad or old
+<p>Sensitive data not sufficiently protected because of bad or old
 cryptography implementation.</p>
 <blockquote>
 <p>💡: Use existing, well respected frameworks to implement
 cryptography.</p>
 </blockquote>
 <h4 id="insecure-design">4. Insecure design</h4>
-<p>Bad design, not tested agains common vulnerabilities.</p>
+<p>Bad design, not tested against common vulnerabilities.</p>
 <h4 id="broken-access-control">5. Broken Access Control</h4>
 <p>Users have to many access rights (attacker gets right to other
 accounts, files, databases, …)</p>
