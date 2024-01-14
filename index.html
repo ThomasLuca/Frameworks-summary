@@ -319,6 +319,7 @@ a resources:
 </figure>
 <h5 id="level-0-the-swamp-of-pox">Level 0: The swamp of pox</h5>
 <ul>
+<li>Plain Old XML (POX)</li>
 <li>One endpoint</li>
 <li>HTTP only as transport</li>
 <li>Remote procedure invocation
@@ -384,7 +385,8 @@ class="sourceCode java"><code class="sourceCode java"><span id="cb1-1"><a href="
 <li><code>@RestController</code>:
 <ul>
 <li>Normal class</li>
-<li>Wrapped in a <code>serverlet</code></li>
+<li>Wrapped in a <code>servlet</code> ( a class that handles requests,
+processes them and reply back with a response)</li>
 <li>REST-service</li>
 </ul></li>
 <li><code>@RequestMapping</code>:
@@ -545,6 +547,44 @@ class="sourceCode java"><code class="sourceCode java"><span id="cb11-1"><a href=
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">@RolesAllowed</span><span class="op">({</span> <span class="st">&quot;ROLE_ADMIN&quot;</span><span class="op">,</span> <span class="st">&quot;ROLE_EDITOR&quot;</span> <span class="op">})</span></span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">deleteUser</span><span class="op">();</span></span>
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h5 id="request-vs-method-authorization">Request vs method
+authorization</h5>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 39%" />
+<col style="width: 26%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Request</th>
+<th>Method</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Type</td>
+<td>Rough</td>
+<td>Detailed</td>
+</tr>
+<tr class="even">
+<td>Place of config</td>
+<td>In config class</td>
+<td>on specific method</td>
+</tr>
+<tr class="odd">
+<td>Type of config</td>
+<td>With lambda expression</td>
+<td>With annotations</td>
+</tr>
+<tr class="even">
+<td>Definition of auth</td>
+<td>In code</td>
+<td>Spring Expression Language</td>
+</tr>
+</tbody>
+</table>
 <h4 id="csrf-cross-site-request-forgery">CSRF: Cross Site Request
 Forgery</h4>
 <p>CSRF is an attack where an attacker tricks a user’s browser into
@@ -595,17 +635,20 @@ class="sourceCode java"><code class="sourceCode java"><span id="cb12-1"><a href=
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">@Id</span></span>
 <span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">@GeneratedValue</span><span class="op">(</span>strategy<span class="op">=</span>GenerationType<span class="op">.</span><span class="fu">IDENTITY</span><span class="op">)</span></span>
 <span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="bu">Long</span> <span class="fu">getId</span><span class="op">()</span> <span class="op">{</span> <span class="cf">return</span> id<span class="op">;</span> <span class="op">}</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">setId</span><span class="op">(</span><span class="bu">Long</span> id<span class="op">)</span> <span class="op">{</span> <span class="kw">this</span><span class="op">.</span><span class="fu">id</span> <span class="op">=</span> id<span class="op">;</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="bu">String</span> <span class="fu">getName</span><span class="op">()</span> <span class="op">{</span> <span class="cf">return</span> name<span class="op">;</span> <span class="op">}</span></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">setName</span><span class="op">(</span><span class="bu">String</span> name<span class="op">)</span> <span class="op">{</span> <span class="kw">this</span><span class="op">.</span><span class="fu">name</span> <span class="op">=</span> name<span class="op">;</span> <span class="op">}</span></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>There are a couple different strategies to assign a new Primary Key:
-- AUTO: Automatically choose strategy - IDENTITY: Relies on an
-auto-incremented column in the database - SEQUENCE: Utilizes a database
-sequence to generate primary key - TABLE: Requires an extra table to
-keep track of the next available id</p>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">setId</span><span class="op">(</span><span class="bu">Long</span> id<span class="op">)</span> <span class="op">{</span> <span class="kw">this</span><span class="op">.</span><span class="fu">id</span> <span class="op">=</span> id<span class="op">;</span> <span class="op">}</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="bu">String</span> <span class="fu">getName</span><span class="op">()</span> <span class="op">{</span> <span class="cf">return</span> name<span class="op">;</span> <span class="op">}</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">setName</span><span class="op">(</span><span class="bu">String</span> name<span class="op">)</span> <span class="op">{</span> <span class="kw">this</span><span class="op">.</span><span class="fu">name</span> <span class="op">=</span> name<span class="op">;</span> <span class="op">}</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>There are a couple different strategies to assign a new Primary
+Key:</p>
+<ul>
+<li>AUTO: Automatically choose strategy</li>
+<li>IDENTITY: Relies on an auto-incremented column in the database</li>
+<li>SEQUENCE: Utilizes a database sequence to generate primary key</li>
+<li>TABLE: Requires an extra table to keep track of the next available
+id</li>
+</ul>
 <h3 id="jpa-in-spring">2.2 JPA in Spring</h3>
 <figure>
 <img src="./img/jpa-config.png" alt="JPA configuration" />
@@ -632,7 +675,7 @@ class="sourceCode java"><code class="sourceCode java"><span id="cb14-1"><a href=
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="bu">List</span><span class="op">&lt;</span>Product<span class="op">&gt;</span> <span class="fu">getProductsByCategory</span><span class="op">(</span><span class="bu">String</span> category<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> productRepository<span class="op">.</span><span class="fu">findByCategory</span><span class="op">(</span>category<span class="op">);</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> repo<span class="op">.</span><span class="fu">findByCategory</span><span class="op">(</span>category<span class="op">);</span></span>
 <span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
 <span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> Product <span class="fu">getProductById</span><span class="op">(</span><span class="dt">long</span> id<span class="op">)</span> <span class="op">{</span></span>
@@ -643,12 +686,17 @@ class="sourceCode java"><code class="sourceCode java"><span id="cb14-1"><a href=
 <span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    repo<span class="op">.</span><span class="fu">save</span><span class="op">(</span>addProduct<span class="op">);</span></span>
 <span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
 <span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>List of build-in methods: - <code>save</code>: save new object -
-<code>findAll</code>: return all entities - <code>findAllById</code>:
-return all with certain id - <code>flush</code>: write changes to DB -
-<code>saveAll</code>: Save list of objects - <code>delete</code>,
-<code>deleteAll</code>: remove entity/entities - <code>existById</code>:
-does entity exist?</p>
+<p>List of build-in methods:</p>
+<ul>
+<li><code>save</code>: save new object</li>
+<li><code>findAll</code>: return all entities</li>
+<li><code>findAllById</code>: return all with certain id</li>
+<li><code>flush</code>: write changes to DB</li>
+<li><code>saveAll</code>: Save list of objects</li>
+<li><code>delete</code>, <code>deleteAll</code>: remove
+entity/entities</li>
+<li><code>existById</code>: does entity exist?</li>
+</ul>
 <blockquote>
 <p>⚠️: Using a JPA requires some configuration in
 <code>application.properties</code></p>
@@ -1079,22 +1127,23 @@ stack</h4>
 <div class="sourceCode" id="cb25"><pre
 class="sourceCode java"><code class="sourceCode java"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="at">@Service</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> SampleDAO<span class="op">{</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="dt">final</span> <span class="bu">Random</span> random <span class="op">=</span> <span class="kw">new</span> <span class="bu">Random</span><span class="op">();</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">String</span><span class="op">[]</span> ids <span class="op">=</span> <span class="op">{</span><span class="st">&quot;S1&quot;</span><span class="op">,</span> <span class="st">&quot;S2&quot;</span><span class="op">,</span> <span class="st">&quot;S3&quot;</span><span class="op">};</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">final</span> <span class="bu">Random</span> random <span class="op">=</span> <span class="kw">new</span> <span class="bu">Random</span><span class="op">();</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">String</span><span class="op">[]</span> ids <span class="op">=</span> <span class="op">{</span><span class="st">&quot;S1&quot;</span><span class="op">,</span> <span class="st">&quot;S2&quot;</span><span class="op">,</span> <span class="st">&quot;S3&quot;</span><span class="op">};</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
 <span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> Flux<span class="op">&lt;</span>Sample<span class="op">&gt;</span> <span class="fu">getSamples</span><span class="op">()</span> <span class="op">{</span></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> Flux<span class="op">.</span><span class="fu">interval</span><span class="op">(</span><span class="bu">Duration</span><span class="op">.</span><span class="fu">ofSeconds</span><span class="op">(</span><span class="dv">1</span><span class="op">)).</span><span class="fu">take</span><span class="op">(</span><span class="dv">10</span><span class="op">)</span></span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">map</span><span class="op">(</span>pulse <span class="op">-&gt;</span> <span class="fu">getSample</span><span class="op">());</span></span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> Flux<span class="op">&lt;</span>Sample<span class="op">&gt;</span> <span class="fu">getSamples</span><span class="op">()</span> <span class="op">{</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Flux<span class="op">.</span><span class="fu">interval</span><span class="op">(</span><span class="bu">Duration</span><span class="op">.</span><span class="fu">ofSeconds</span><span class="op">(</span><span class="dv">1</span><span class="op">)).</span><span class="fu">take</span><span class="op">(</span><span class="dv">10</span><span class="op">)</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">map</span><span class="op">(</span>pulse <span class="op">-&gt;</span> <span class="fu">getSample</span><span class="op">());</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
 <span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span> Sample <span class="fu">getSample</span><span class="op">()</span> <span class="op">{</span></span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>  Sample s <span class="op">=</span> <span class="kw">new</span> <span class="fu">Sample</span><span class="op">();</span></span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>  s<span class="op">.</span><span class="fu">setId</span><span class="op">(</span>ids<span class="op">[</span>random<span class="op">.</span><span class="fu">nextInt</span><span class="op">(</span>ids<span class="op">.</span><span class="fu">length</span><span class="op">)]);</span></span>
-<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>  s<span class="op">.</span><span class="fu">setTime</span><span class="op">(</span>LocalDateTime<span class="op">.</span><span class="fu">now</span><span class="op">());</span></span>
-<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>  s<span class="op">.</span><span class="fu">setValue</span><span class="op">(</span><span class="fl">4882.42</span><span class="op">);</span></span>
-<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> s<span class="op">;</span></span>
-<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> Sample <span class="fu">getSample</span><span class="op">()</span> <span class="op">{</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>    Sample s <span class="op">=</span> <span class="kw">new</span> <span class="fu">Sample</span><span class="op">();</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>    s<span class="op">.</span><span class="fu">setId</span><span class="op">(</span>ids<span class="op">[</span>random<span class="op">.</span><span class="fu">nextInt</span><span class="op">(</span>ids<span class="op">.</span><span class="fu">length</span><span class="op">)]);</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>    s<span class="op">.</span><span class="fu">setTime</span><span class="op">(</span>LocalDateTime<span class="op">.</span><span class="fu">now</span><span class="op">());</span></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>    s<span class="op">.</span><span class="fu">setValue</span><span class="op">(</span><span class="fl">4882.42</span><span class="op">);</span></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> s<span class="op">;</span></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>Reactive controller</p>
 <div class="sourceCode" id="cb26"><pre
 class="sourceCode java"><code class="sourceCode java"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="at">@RestController</span></span>
@@ -1185,18 +1234,17 @@ class="sourceCode java"><code class="sourceCode java"><span id="cb29-1"><a href=
 <span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">@Value</span><span class="op">(</span><span class="st">&quot;${Q_select_products}&quot;</span><span class="op">)</span></span>
 <span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="bu">String</span> selectProducts<span class="op">;</span></span>
 <span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="bu">DataSource</span> dataSource<span class="op">;</span></span>
-<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">@Autowired</span></span>
-<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">setDataSource</span><span class="op">(</span><span class="bu">DataSource</span> dataSource<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span><span class="fu">dataSource</span> <span class="op">=</span> dataSource<span class="op">;</span></span>
-<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="bu">Connection</span> <span class="fu">openConnectie</span><span class="op">()</span> <span class="kw">throws</span> <span class="bu">SQLException</span> <span class="op">{</span></span>
-<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> dataSource<span class="op">.</span><span class="fu">getConnection</span><span class="op">();</span></span>
-<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="bu">DataSource</span> dataSource<span class="op">;</span></span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">@Autowired</span></span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>  <span class="kw">public</span> <span class="dt">void</span> <span class="fu">setDataSource</span><span class="op">(</span><span class="bu">DataSource</span> dataSource<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span><span class="fu">dataSource</span> <span class="op">=</span> dataSource<span class="op">;</span></span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="bu">Connection</span> <span class="fu">openConnectie</span><span class="op">()</span> <span class="kw">throws</span> <span class="bu">SQLException</span> <span class="op">{</span></span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> dataSource<span class="op">.</span><span class="fu">getConnection</span><span class="op">();</span></span>
+<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <h4 id="performing-actions-get-on-database">Performing actions (GET) on
 database</h4>
 <div class="sourceCode" id="cb30"><pre
@@ -1252,7 +1300,7 @@ class="sourceCode java"><code class="sourceCode java"><span id="cb31-1"><a href=
 <hr />
 <h2 id="ado.net">7. ADO.NET</h2>
 <p>To get access from .NET-application to datasource (database, xml,
-..).</p>
+…).</p>
 <ul>
 <li>Loose coupling between application and datasource: Perform data
 manipulations on a part of the data without immediately applying these
